@@ -7,6 +7,10 @@ from flask import Flask, request, jsonify
 with open('mlflow/artifacts/production_model.bin', 'rb') as f_in:
     model, dv = pickle.load(f_in)
 
+num = ['age', 'balance', 'day_of_week', 'campaign', 'pdays', 'previous']
+cat = ['job', 'housing', 'contact', 'month', 'poutcome']
+
+
 def cast_dataframe_types(df, num, cat):
     # Cast numeric columns
     for col in num:
@@ -16,41 +20,30 @@ def cast_dataframe_types(df, num, cat):
     for col in cat:
         df[col] = df[col].astype('category')
 
-    return df    
+    return df
 
-def transform_data(data):
-    df = pd.DataFrame([data])
-    num = ['age', 'balance', 'day_of_week', 'campaign', 'pdays', 'previous']
-    cat = ['job', 'housing', 'contact', 'month', 'poutcome']
-    df = cast_dataframe_types(df, num, cat)
-    features = num + cat
-    df_transformed =  df[features].copy()
+def mapping_pdays(col):
+    return col.apply(lambda x:
+                    'never' if x == -1 
+                    else ('plus 12 months' if x > 365 
+                          else ('plus 6 months' if 180 <= x <= 365 
+                                else '6 months'
+                               )
+                         )
+                   )
 
-    # mapping pdays based on conditions
-    df_transformed['pdays'] = df_transformed['pdays'].apply(lambda x: 
-                                                            'never' if x == -1 
-                                                            else ('plus 12 months' if x > 365 
-                                                                  else ('plus 6 months' if 180 <= x <= 365 
-                                                                        else '6 months'
-                                                                       )
-                                                                 )
-                                                           )
-    
-    # mapping previous based on conditions
-    df_transformed['previous'] = df_transformed['previous'].apply(lambda x: 
-                                                                  'never' if x == 0 
-                                                                  else ('more than 5' if x > 5 
-                                                                        else 'less than 5'
-                                                                       )
-                                                                 )
-    
-    # mapping campaing based on conditions
-    df_transformed['campaign'] = df_transformed['campaign'].apply(lambda x: 
-                                                                  'once' if x == 1 
-                                                                  else 'more than once'
-                                                                 )
+def mapping_previous(col):
+    return col.apply(lambda x:
+                     'never' if x == 0 
+                     else ('more than 5' if x > 5 
+                           else 'less than 5'
+                           )
+                     )
 
-    # Consolidate categories of categorical features with many categories
+def mapping_campaign(col):
+    return col.apply(lambda x: 'once' if x == 1 else 'more than once')
+
+def create_season_column(df):
     seasons = {
         'fall': ['sep','oct','nov'],
         'winter': ['dec','jan','feb'],
@@ -58,34 +51,69 @@ def transform_data(data):
         'summer': ['jun','jul','aug']
     }
 
-    df_transformed['season'] = [season[0] for mon in df_transformed['month'] for season in list(seasons.items()) if mon in season[1]]
-    
+    df['season'] = [season[0] for mon in df['month'] for season in list(seasons.items()) if mon in season[1]]
+    return df.drop(['month'], axis=1)
+
+def create_job_categories(df):
     job_category = {
         'cat_1': ['blue-collar','entrepreneur','housemaid'],
         'cat_2': ['retired','student','unemployed'],
         'cat_3': ['technician', 'admin.', 'management', 'services','unknown', 'self-employed']
     }
 
-    df_transformed['job_category'] = [category[0] for job in df_transformed['job'] for category in list(job_category.items()) if job in category[1]]
-    df_transformed = df_transformed.drop(['month','job'], axis=1).copy()
-    df_transformed['contact'] = ['no' if contact == 'unknown' else 'yes' for contact in df_transformed['contact']]
+    df['job_category'] = [category[0] for job in df['job'] for category in list(job_category.items()) if job in category[1]]
+    return df.drop(['job'], axis=1)
 
-    df_transformed['poutcome'] = [outcome if outcome in ['success', 'failure'] else 'other' for outcome in df_transformed['poutcome']]
+def transform_contact(col):
+    return ['no' if c == 'unknown' else 'yes' for c in col]
 
-    return dv.transform(df_transformed.to_dict(orient='records'))
+def transform_poutcome(col):
+    return [o if o in ['success', 'failure'] else 'other' for o in col]
+
+def transform_data(df):
+    df = cast_dataframe_types(df, num, cat)
+    # mapping pdays based on conditions
+    df['pdays'] = mapping_pdays(df['pdays'])
+
+    # mapping previous based on conditions
+    df['previous'] = mapping_previous(df['previous']) 
+
+    # mapping campaign based on conditions
+    df['campaign'] = mapping_campaign(df['campaign'])
+
+    # create seasons column 
+    df = create_season_column(df)
+
+    # create job categories
+    df = create_job_categories(df)
+
+    # transfrom contact column
+    df['contact'] = transform_contact(df['contact'])
+
+    # transform poutcome
+    df['poutcome'] = transform_poutcome(df['poutcome'])
+    
+    return df.to_dict(orient='records')
+
+def vectorize_features(dv, X):
+    return dv.transform(X)
 
 
-app = Flask('predict-duration')
+app = Flask('predict-response')
 
 @app.route('/predict', methods=['POST'])
 def predict_endpoint():
     data = request.get_json()
-    X_val = transform_data(data)
-    y_pred = model.predict(X_val)
+    data = pd.DataFrame([data])
+    
+    # preprocess
+    data = transform_data(data)
+    X = vectorize_features(dv, data)
+    
+    # predict
+    y_pred = model.predict(X)
     
     return jsonify(y_pred.mean())
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=9696)
-
-

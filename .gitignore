@@ -1,0 +1,7 @@
+.venv
+mage_data/
+mlflow/
+mlops/*__pycache__
+mlops/*.file_versions
+mlops/*.ssh_tunnel
+.ipynb_checkpoints/

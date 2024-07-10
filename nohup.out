@@ -1,0 +1,96 @@
+[I 2024-07-10 12:29:05.879 ServerApp] jupyter_lsp | extension was successfully linked.
+[I 2024-07-10 12:29:05.885 ServerApp] jupyter_server_terminals | extension was successfully linked.
+[I 2024-07-10 12:29:05.892 ServerApp] jupyterlab | extension was successfully linked.
+[I 2024-07-10 12:29:05.898 ServerApp] notebook | extension was successfully linked.
+[I 2024-07-10 12:29:05.900 ServerApp] Writing Jupyter server cookie secret to /home/minasonbol/.local/share/jupyter/runtime/jupyter_cookie_secret
+[I 2024-07-10 12:29:06.208 ServerApp] notebook_shim | extension was successfully linked.
+[I 2024-07-10 12:29:06.231 ServerApp] notebook_shim | extension was successfully loaded.
+[I 2024-07-10 12:29:06.234 ServerApp] jupyter_lsp | extension was successfully loaded.
+[I 2024-07-10 12:29:06.235 ServerApp] jupyter_server_terminals | extension was successfully loaded.
+[I 2024-07-10 12:29:06.237 LabApp] JupyterLab extension loaded from /home/minasonbol/bank-marketing/.venv/lib/python3.10/site-packages/jupyterlab
+[I 2024-07-10 12:29:06.237 LabApp] JupyterLab application directory is /home/minasonbol/bank-marketing/.venv/share/jupyter/lab
+[I 2024-07-10 12:29:06.238 LabApp] Extension Manager is 'pypi'.
+[I 2024-07-10 12:29:06.297 ServerApp] jupyterlab | extension was successfully loaded.
+[I 2024-07-10 12:29:06.301 ServerApp] notebook | extension was successfully loaded.
+[I 2024-07-10 12:29:06.302 ServerApp] Serving notebooks from local directory: /home/minasonbol/bank-marketing
+[I 2024-07-10 12:29:06.302 ServerApp] Jupyter Server 2.14.1 is running at:
+[I 2024-07-10 12:29:06.302 ServerApp] http://localhost:8888/tree?token=447523e7ceeaa7d23c00a23dfaa3d34acffa06767896a89a
+[I 2024-07-10 12:29:06.302 ServerApp]     http://127.0.0.1:8888/tree?token=447523e7ceeaa7d23c00a23dfaa3d34acffa06767896a89a
+[I 2024-07-10 12:29:06.302 ServerApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 2024-07-10 12:29:06.311 ServerApp] 
+    
+    To access the server, open this file in a browser:
+        file:///home/minasonbol/.local/share/jupyter/runtime/jpserver-44861-open.html
+    Or copy and paste one of these URLs:
+        http://localhost:8888/tree?token=447523e7ceeaa7d23c00a23dfaa3d34acffa06767896a89a
+        http://127.0.0.1:8888/tree?token=447523e7ceeaa7d23c00a23dfaa3d34acffa06767896a89a
+[I 2024-07-10 12:29:06.334 ServerApp] Skipped non-installed server(s): bash-language-server, dockerfile-language-server-nodejs, javascript-typescript-langserver, jedi-language-server, julia-language-server, pyright, python-language-server, python-lsp-server, r-languageserver, sql-language-server, texlab, typescript-language-server, unified-language-server, vscode-css-languageserver-bin, vscode-html-languageserver-bin, vscode-json-languageserver-bin, yaml-language-server
+[I 2024-07-10 12:29:27.343 ServerApp] Creating new notebook in 
+[I 2024-07-10 12:29:27.399 ServerApp] Writing notebook-signing key to /home/minasonbol/.local/share/jupyter/notebook_secret
+[I 2024-07-10 12:29:27.807 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 12:29:27.978 ServerApp] Kernel started: 7890b42c-c56c-41a6-ba3d-ccf6e41d6b26
+[I 2024-07-10 12:29:28.599 ServerApp] Connecting to kernel 7890b42c-c56c-41a6-ba3d-ccf6e41d6b26.
+[I 2024-07-10 12:29:28.899 ServerApp] Connecting to kernel 7890b42c-c56c-41a6-ba3d-ccf6e41d6b26.
+[I 2024-07-10 12:29:29.705 ServerApp] Connecting to kernel 7890b42c-c56c-41a6-ba3d-ccf6e41d6b26.
+[I 2024-07-10 12:29:30.363 ServerApp] Connecting to kernel 7890b42c-c56c-41a6-ba3d-ccf6e41d6b26.
+[I 2024-07-10 12:31:30.030 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 12:33:30.174 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 12:35:30.488 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 12:37:30.655 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 12:39:30.838 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 12:41:31.256 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 12:43:31.430 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 12:45:31.708 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 12:55:33.077 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 12:57:33.235 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 12:59:33.397 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 13:01:33.542 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 13:03:34.538 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 13:14:22.813 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 13:24:23.870 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 13:26:29.725 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 13:28:17.958 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 13:28:50.090 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 13:36:51.105 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 13:38:51.307 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 13:40:08.292 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 13:42:08.794 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 13:54:10.826 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 13:54:31.196 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 13:54:35.510 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 13:56:22.404 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 13:56:25.948 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 14:04:23.732 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 14:06:24.568 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 14:07:08.321 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 14:14:51.449 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 14:14:58.072 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 14:15:40.035 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 14:15:51.846 ServerApp] Saving file at /Untitled.ipynb
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/usr/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/home/minasonbol/bank-marketing/.venv/lib/python3.10/site-packages/ipykernel_launcher.py", line 18, in <module>
+    app.launch_new_instance()
+  File "/home/minasonbol/bank-marketing/.venv/lib/python3.10/site-packages/traitlets/config/application.py", line 1074, in launch_instance
+    app.initialize(argv)
+  File "/home/minasonbol/bank-marketing/.venv/lib/python3.10/site-packages/traitlets/config/application.py", line 118, in inner
+    return method(app, *args, **kwargs)
+  File "/home/minasonbol/bank-marketing/.venv/lib/python3.10/site-packages/ipykernel/kernelapp.py", line 692, in initialize
+    self.init_sockets()
+  File "/home/minasonbol/bank-marketing/.venv/lib/python3.10/site-packages/ipykernel/kernelapp.py", line 331, in init_sockets
+    self.shell_port = self._bind_socket(self.shell_socket, self.shell_port)
+  File "/home/minasonbol/bank-marketing/.venv/lib/python3.10/site-packages/ipykernel/kernelapp.py", line 253, in _bind_socket
+    return self._try_bind_socket(s, port)
+  File "/home/minasonbol/bank-marketing/.venv/lib/python3.10/site-packages/ipykernel/kernelapp.py", line 229, in _try_bind_socket
+    s.bind("tcp://%s:%i" % (self.ip, port))
+  File "/home/minasonbol/bank-marketing/.venv/lib/python3.10/site-packages/zmq/sugar/socket.py", line 311, in bind
+    super().bind(addr)
+  File "_zmq.py", line 898, in zmq.backend.cython._zmq.Socket.bind
+  File "_zmq.py", line 160, in zmq.backend.cython._zmq._check_rc
+zmq.error.ZMQError: Address already in use (addr='tcp://127.0.0.1:56523')
+[I 2024-07-10 14:17:52.831 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-07-10 14:33:06.137 ServerApp] Saving file at /split_data_by_season.ipynb
+[I 2024-07-10 14:35:07.290 ServerApp] Saving file at /split_data_by_season.ipynb
