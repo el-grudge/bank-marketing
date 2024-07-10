@@ -1,0 +1,38 @@
+services:
+  magic:
+    image: mageai/mageai:latest
+    command: bash -c "pip3 install -r /home/src/requirements.txt && mage start ${PROJECT_NAME}"
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      USER_CODE_PATH: /home/src/${PROJECT_NAME}
+      ENV: ${ENV}
+      MLFLOW_TRACKING_URI: http://mlflow:5000  # MLflow tracking URI  
+    ports:
+      - 6789:6789
+    volumes:
+      - .:/home/src/
+    networks:
+      - app-network
+    restart: on-failure:5
+    stdin_open: true # used for interactive debugging
+    tty: true # used for interactive debugging
+  mlflow:
+    image: ghcr.io/mlflow/mlflow
+    ports:
+      - "5000:5000"
+    environment:
+      - MLFLOW_TRACKING_URI=sqlite:///mlflow/mlflow.db
+    command: mlflow server --backend-store-uri sqlite:///mlflow/db/mlflow.db -h 0.0.0.0
+    volumes:
+      - ./mlflow/artifacts:/mlflow/artifacts
+      - ./mlflow/db:/mlflow/db
+    restart: always
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
