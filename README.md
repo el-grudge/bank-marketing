@@ -20,17 +20,18 @@
 - [ ] makefile
 - [ ] pre-commit hooks
 - [ ] ci/cd
-- [ ] experiment registry - cloud
+- [ ] mlflow experiment registry - cloud
 - [ ] workflow orchestration - cloud (check volumes in docker_compose.yaml, don't upload ssh keys to cloud)
 - [ ] iac 
 - [ ] hyperparameter tuning
-- [ ] copy only necessary files to mage docker container (./:/home/src copies everything)
+- [x] copy only necessary files to mage docker container (./:/home/src copies everything)
 - [ ] add grafana to docker-compose
-- [ ] create shared volumnes for all docker services (volumes)
+- [x] create shared volumnes for all docker services (volumes) (doesn't work)
 - [ ] build model monitoring dashboard in grafana
-- [ ] connect mlflow, mage, grafana to postgres service
-- [ ] add model docker to docker-compose
-
+- [x] connect mlflow, mage, grafana to postgres service (mage is almost impossible to do)
+- [ ] connect grafana to db 
+- [x] add model docker to docker-compose (might need to undo this step. if model is redeployed will have to restart docker compose)
+- [ ] save validation dataset
 
 ## Evaluation Criteria
 

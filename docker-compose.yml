@@ -1,7 +1,7 @@
 services:
   magic:
     image: mageai/mageai:latest
-    command: bash -c "pip3 install -r /home/src/requirements.txt && mage start ${PROJECT_NAME}"
+    command: bash -c "pip3 install -r /home/src/mlops/requirements.txt && mage start ${PROJECT_NAME}"
     env_file:
       - .env
     build:
@@ -14,7 +14,9 @@ services:
     ports:
       - 6789:6789
     volumes:
-      - .:/home/src/
+      - ./mlops/:/home/src/mlops
+      - ./mage_data:/home/src/mage_data
+      - ./mlflow/artifacts:/home/src/mlflow/artifacts
     networks:
       - app-network
     restart: on-failure:5
@@ -25,7 +27,7 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - MLFLOW_TRACKING_URI=sqlite:///mlflow/mlflow.db
+      - MLFLOW_TRACKING_URI=sqlite:///mlflow/db/mlflow.db
     command: mlflow server --backend-store-uri sqlite:///mlflow/db/mlflow.db -h 0.0.0.0
     volumes:
       - ./mlflow/artifacts:/mlflow/artifacts
@@ -33,6 +35,14 @@ services:
     restart: always
     networks:
       - app-network
+  predict:
+    image: predict-response:v01
+    build:
+      dockerfile: predict.dockerfile   
+    ports:
+      - "9696:9696"
 networks:
   app-network:
     driver: bridge
+
+
