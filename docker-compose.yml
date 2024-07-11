@@ -6,7 +6,6 @@ services:
       - .env
     build:
       context: .
-      dockerfile: Dockerfile
     environment:
       USER_CODE_PATH: /home/src/${PROJECT_NAME}
       ENV: ${ENV}
@@ -44,5 +43,3 @@ services:
 networks:
   app-network:
     driver: bridge
-
-
