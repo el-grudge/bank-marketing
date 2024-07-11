@@ -25,6 +25,12 @@
 - [ ] iac 
 - [ ] hyperparameter tuning
 - [ ] copy only necessary files to mage docker container (./:/home/src copies everything)
+- [ ] add grafana to docker-compose
+- [ ] create shared volumnes for all docker services (volumes)
+- [ ] build model monitoring dashboard in grafana
+- [ ] connect mlflow, mage, grafana to postgres service
+- [ ] add model docker to docker-compose
+
 
 ## Evaluation Criteria
 
