@@ -84,6 +84,22 @@ services:
     stdin_open: true # used for interactive debugging
     tty: true # used for interactive debugging
 
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    depends_on:
+      - postgresdb
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./config/grafana_datasources.yaml:/etc/grafana/provisioning/datasources/datasource.yaml:ro
+      # - ./config/grafana_dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml:ro
+      # - ./dashboards:/opt/grafana/dashboards
+    networks:
+      - app-network
+      - back-tier
+    restart: always
+
 networks:
   back-tier:
     driver: bridge

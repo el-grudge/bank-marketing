@@ -134,3 +134,8 @@ docker run -it response_predictor:v001 /bin/bash
 # use the -p option to bind the image to a port to access the webservice
 docker run -it --rm -p 9696:9696 response_predictor:v001
 ```
+
+
+grafana login
+
+admin / password
