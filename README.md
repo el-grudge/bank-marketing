@@ -10,6 +10,7 @@
 - [x] promote top model to production
 - [x] deployment - model container
 - [ ] split data by season  
+- [ ] remove line from train pipeline - train (transform) block - that selects 100 rows from data
 - [ ] model monitoring in grafana
 - [ ] trigger retraining if performance decrease (test with data from different season)
 - [ ] modify ingest to read data from personal github repo instead of uci url, to get data for specific season

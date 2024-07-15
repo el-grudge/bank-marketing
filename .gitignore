@@ -8,3 +8,4 @@ mage_data/mlops/.cache/
 mage_data/mlops/.operation_history/
 mage_data/mlops/pipelines/*/.logs
 mage_data/mlops/pipelines/*/.variables
+nohup.out

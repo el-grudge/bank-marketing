@@ -31,12 +31,12 @@ blocks:
   language: python
   name: load
   retry_config: null
-  status: executed
+  status: updated
   timeout: null
   type: custom
   upstream_blocks: []
   uuid: load
-- all_upstream_blocks_executed: true
+- all_upstream_blocks_executed: false
   color: null
   configuration:
     file_source:
@@ -49,14 +49,14 @@ blocks:
   language: python
   name: train
   retry_config: null
-  status: executed
+  status: updated
   timeout: null
   type: transformer
   upstream_blocks:
   - load
   - training_set
   uuid: train
-- all_upstream_blocks_executed: true
+- all_upstream_blocks_executed: false
   color: null
   configuration:
     file_source:

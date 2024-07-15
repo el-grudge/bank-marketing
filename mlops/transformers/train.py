@@ -1,6 +1,3 @@
-#from typing import Callable, Dict, Tuple, Union
-#from sklearn.base import BaseEstimator
-
 from mlops.utils.logging import track_experiment
 from mlops.utils.models.model_training import load_class, train_model
 
@@ -14,7 +11,7 @@ def training(
     training_set,
     *args,
     **kwargs,
-): # -> Tuple[str, BaseEstimator, float]:
+): 
     # Specify your transformation logic here
     mlmodel_class = load_class(model_info)
     X_train, X_val, y_train, y_val = training_set['build']
