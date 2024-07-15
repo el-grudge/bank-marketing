@@ -33,6 +33,7 @@
 - [x] connect grafana to db 
 - [x] add model docker to docker-compose (might need to undo this step. if model is redeployed will have to restart docker compose)
 - [ ] save validation dataset
+- [ ] trouble shoot no database root error in postgres docker (delete all other dockers, re-add one-by-one see which one causes error)
 
 ## Evaluation Criteria
 
