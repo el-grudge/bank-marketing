@@ -1,0 +1,33 @@
+
+
+def vectorize_features(dv, X):
+    return dv.transform(X)
+
+
+def load_pickle(filename):
+    with open(f'mlflow/artifacts/{filename}', 'rb') as f_in:
+        payload = pickle.load(f_in)
+    return payload
+
+
+dv = load_pickle('/home/src/mlflow/artifacts/preprocessor.b')
+model = load_pickle('/home/src/mlflow/artifacts/production_model.bin')
+
+app = Flask('predict-response')
+
+@app.route('/predict', methods=['POST'])
+def predict_endpoint():
+    data = request.get_json()
+    data = pd.DataFrame([data])
+    
+    # preprocess
+    data = transform_data(data)
+    X = vectorize_features(dv, data)
+    
+    # predict
+    y_pred = model.predict(X)
+    
+    return jsonify(y_pred.mean())
+
+if __name__ == "__main__":
+    app.run(debug=True, host='0.0.0.0', port=9696)

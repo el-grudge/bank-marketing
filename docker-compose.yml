@@ -1,45 +1,92 @@
 services:
+  postgresdb:
+    image: postgres:14
+    container_name: postgresdb
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - back-tier
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      retries: 5
+
+  adminer:
+    image: adminer
+    container_name: adminer    
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - back-tier
+      - app-network  
+
+  mlflow:
+    container_name: mlflow-postgres
+    build:
+      context: .
+      dockerfile: mlflow.dockerfile
+    command: >
+      mlflow server --backend-store-uri postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${PG_HOST_PORT}/${POSTGRES_DB}?options=-csearch_path=${MLFLOW_SCHEMA} -h 0.0.0.0
+    env_file:
+      - .env
+    ports:
+      - "5000:5000"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_SCHEMA: ${MLFLOW_SCHEMA}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      PG_HOST_PORT: ${PG_HOST_PORT}
+    depends_on:
+      - postgresdb
+    volumes:
+      - ./mlflow/artifacts:/mlflow/artifacts
+    restart: always
+    networks:
+      - back-tier
+      - app-network
+      
   magic:
     image: mageai/mageai:latest
+    container_name: magic-postgres
+    depends_on:
+      - postgresdb
     command: bash -c "pip3 install -r /home/src/mlops/requirements.txt && mage start ${PROJECT_NAME}"
     env_file:
       - .env
-    build:
-      context: .
     environment:
       USER_CODE_PATH: /home/src/${PROJECT_NAME}
       ENV: ${ENV}
       MLFLOW_TRACKING_URI: http://mlflow:5000  # MLflow tracking URI  
+      MAGE_DATABASE_CONNECTION_URL: "postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${PG_HOST_PORT}/${POSTGRES_DB}?options=-c%20search_path%3D${MAGE_SCHEMA}"
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      PG_HOST_PORT: ${PG_HOST_PORT}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_SCHEMA: ${MAGE_SCHEMA}      
     ports:
       - 6789:6789
     volumes:
       - ./mlops/:/home/src/mlops
-      - ./mage_data:/home/src/mage_data
       - ./mlflow/artifacts:/home/src/mlflow/artifacts
     networks:
       - app-network
+      - back-tier      
     restart: on-failure:5
     stdin_open: true # used for interactive debugging
     tty: true # used for interactive debugging
-  mlflow:
-    image: ghcr.io/mlflow/mlflow
-    ports:
-      - "5000:5000"
-    environment:
-      - MLFLOW_TRACKING_URI=sqlite:///mlflow/db/mlflow.db
-    command: mlflow server --backend-store-uri sqlite:///mlflow/db/mlflow.db -h 0.0.0.0
-    volumes:
-      - ./mlflow/artifacts:/mlflow/artifacts
-      - ./mlflow/db:/mlflow/db
-    restart: always
-    networks:
-      - app-network
-  predict:
-    image: predict-response:v01
-    build:
-      dockerfile: predict.dockerfile   
-    ports:
-      - "9696:9696"
+
 networks:
+  back-tier:
+    driver: bridge
   app-network:
     driver: bridge
+  

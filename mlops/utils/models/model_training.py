@@ -11,7 +11,6 @@ def load_class(full_class_string):
 
 def train_model(
     model,
-    preprocessor,
     X_train,
     y_train,
     X_val,
@@ -28,11 +27,10 @@ def train_model(
     metrics = {'accuracy': accuracy}
 
     if callback:
-        callback(
+        run_id = callback(
             hyperparameters=model.get_params(),
             metrics=metrics,
-            model=model,
-            preprocessor=preprocessor
+            model=model
         )
 
-    return model, metrics, y_pred
+    return model, metrics, y_pred, run_id

@@ -9,9 +9,9 @@ url = 'http://localhost:9696/predict'
 
 customer_id = 'xyz-123'
 customer = {
-    'age': '58',
-    'job': 'management',
-    'balance': '2143',
+    'age': '30',
+    'job': 'admin.',
+    'balance': '2443',
     'housing': 'yes',
     'contact': 'NaN',
     'day_of_week': '5',

@@ -5,7 +5,7 @@ blocks:
     global_data_product:
       uuid: training_set
   downstream_blocks:
-  - training
+  - train
   executor_config: null
   executor_type: local_python
   has_callback: false
@@ -21,99 +21,71 @@ blocks:
   color: teal
   configuration:
     dynamic: true
+    file_source:
+      path: custom/load.py
   downstream_blocks:
-  - training
+  - train
   executor_config: null
   executor_type: local_python
   has_callback: false
   language: python
-  name: load_models
+  name: load
   retry_config: null
   status: executed
   timeout: null
   type: custom
   upstream_blocks: []
-  uuid: load_models
+  uuid: load
 - all_upstream_blocks_executed: true
   color: null
-  configuration: {}
+  configuration:
+    file_source:
+      path: transformers/train.py
   downstream_blocks:
-  - register_model
+  - register
   executor_config: null
   executor_type: local_python
   has_callback: false
   language: python
-  name: training
+  name: train
   retry_config: null
   status: executed
   timeout: null
   type: transformer
   upstream_blocks:
+  - load
   - training_set
-  - load_models
-  uuid: training
+  uuid: train
 - all_upstream_blocks_executed: true
-  color: pink
-  configuration: {}
-  downstream_blocks:
-  - stage_model
-  executor_config: null
-  executor_type: local_python
-  has_callback: false
-  language: python
-  name: register_model
-  retry_config: null
-  status: executed
-  timeout: null
-  type: custom
-  upstream_blocks:
-  - training
-  uuid: register_model
-- all_upstream_blocks_executed: true
-  color: pink
-  configuration: {}
-  downstream_blocks:
-  - promote_to_production
-  executor_config: null
-  executor_type: local_python
-  has_callback: false
-  language: python
-  name: stage_model
-  retry_config: null
-  status: executed
-  timeout: null
-  type: custom
-  upstream_blocks:
-  - register_model
-  uuid: stage_model
-- all_upstream_blocks_executed: true
-  color: pink
-  configuration: {}
+  color: null
+  configuration:
+    file_source:
+      path: data_exporters/register.py
   downstream_blocks: []
   executor_config: null
   executor_type: local_python
   has_callback: false
   language: python
-  name: promote_to_production
+  name: register
   retry_config: null
   status: executed
   timeout: null
-  type: custom
+  type: data_exporter
   upstream_blocks:
-  - stage_model
-  uuid: promote_to_production
+  - train
+  uuid: register
 cache_block_output_in_memory: false
 callbacks: []
 concurrency_config: {}
 conditionals: []
-created_at: '2024-07-10 03:20:27.808937+00:00'
+created_at: '2024-07-15 04:23:39.907528+00:00'
 data_integration: null
 description: null
 executor_config: {}
 executor_count: 1
 executor_type: null
 extensions: {}
-name: training
+name: train
 notification_config: {}
 remote_variables_dir: null
 retry_config: {}
@@ -123,6 +95,6 @@ settings:
 spark_config: {}
 tags: []
 type: python
-uuid: training
+uuid: train
 variables_dir: /home/src/mage_data/mlops
 widgets: []

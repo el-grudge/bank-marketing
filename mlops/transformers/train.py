@@ -1,3 +1,6 @@
+#from typing import Callable, Dict, Tuple, Union
+#from sklearn.base import BaseEstimator
+
 from mlops.utils.logging import track_experiment
 from mlops.utils.models.model_training import load_class, train_model
 
@@ -7,18 +10,19 @@ if 'transformer' not in globals():
 
 @transformer
 def training(
+    model_info,
     training_set,
-    model_class_name,
     *args,
     **kwargs,
-):
+): # -> Tuple[str, BaseEstimator, float]:
     # Specify your transformation logic here
-    mlmodel_class = load_class(model_class_name)
-    X_train, X_val, y_train, y_val, dv = training_set['build']
+    mlmodel_class = load_class(model_info)
+    X_train, X_val, y_train, y_val = training_set['build']
 
-    model, metrics, y_pred = train_model(
+    X_train, X_val, y_train, y_val = X_train[:100], X_val[:100], y_train[:100], y_val[:100]
+  
+    model, metrics, y_pred, run_id = train_model(
         mlmodel_class(),
-        dv,
         X_train,
         y_train,
         X_val,
@@ -27,4 +31,5 @@ def training(
         random_state=42,
     )
 
-    return model, dv, metrics, y_pred
+    return run_id, model, metrics
+    
