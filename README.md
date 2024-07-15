@@ -30,7 +30,7 @@
 - [x] create shared volumnes for all docker services (volumes) (doesn't work)
 - [ ] build model monitoring dashboard in grafana
 - [x] connect mlflow, mage, grafana to postgres service (mage is almost impossible to do)
-- [ ] connect grafana to db 
+- [x] connect grafana to db 
 - [x] add model docker to docker-compose (might need to undo this step. if model is redeployed will have to restart docker compose)
 - [ ] save validation dataset
 
