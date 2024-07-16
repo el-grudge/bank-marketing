@@ -1,4 +1,111 @@
-# banking-marketingd
+# banking-marketing
+
+## Bank Marketing 
+
+### Problem description
+
+In 2012 a Portuguese banking institution collected data for several direct marketing campaigns it conducted in order to analyze it and to build machine learning models that can increase the efficiency of future marketing campaigns.
+
+A marketing campaign is a concentrated effort by the bank in which it contacts its customers by phone and asks them to subscribe to a term deposit. Term deposits, aka certificate depoists, are deposits by customers that are made for a specific period of time and tradionally return more interest than savings accounts. They provide a guarantee for the banks that the money will remain available for a known period of time, which helps them better manage their available capitol.
+
+In this project, I'll be using the this dataset to create an end-to-end MLOps dashboard to train, deploy, and monitor an ML model that predicts whether a customer subscribes to a term depoist. The data set can be downloaded [here](https://archive.ics.uci.edu/dataset/222/bank+marketing).
+
+The original dataset has 16 features, and one target variable: 
+
+| Variable Name | Role     | Type        | Description | Missing Values |
+|---------------|----------|-------------|-------------|----------------|
+| age           | feature  | integer     | age         | no             |
+| job           | feature  | categorical | occupation  | no             |
+| marital       | feature  | categorical | marital status | no             |
+| education     | feature  | categorical | education level            | no             |
+| default       | feature  | binary      | has credit in default? | no |
+| balance       | feature  | integer     | average yearly balance | no |
+| housing       | feature  | binary      | has housing loan? | no |
+| loan          | feature  | binary      | has personal loan? | no |
+| contact       | feature  | categorical | contact communication type ('cellular','telephone') | yes |
+| day_of_week   | feature  | date        | last contact day of the week | no |
+| month         | feature  | date        | last contact month of year ('jan', 'feb', 'mar', ...) | no |
+| duration      | feature  | integer     | last contact duration, in seconds | no |
+| campaign      | feature  | integer     | number of contacts performed during this campaign and for this client (includes last contact) | no |
+| pdays         | feature  | integer     | number of days that passed by after the client was last contacted from a previous campaign (-1 means client was not previously contacted) | yes |
+| previous      | feature  | integer     | number of contacts performed before this campaign and for this client | no |
+| poutcome      | feature  | categorical | outcome of the previous marketing campaign ('failure','nonexistent','success') | yes |
+| y             | target   | binary      | has the client subscribed a term deposit? | |:
+
+I'm discarding the following 5 features: marital, education, default, loan, duration. For more details on how the features relate to the target, check out the notebook [here](https://github.com/el-grudge/mleng-zoomcamp/blob/main/week_7/bank_marketing.ipynb).
+
+
+Tech stack:  
+1- MLflow for experiment tracking  
+2- Mage for orchestration  
+3- Evidently + Grafana for monitoring  
+4- Flask for creating an API  
+5- Docker + Docker-compose for deployment  
+6- Postgres database to store tracking, orchestration, and monitoring data
+
+In the worfklow, I train multiple binary classifiers, deploy the best performing one, and monitor its performance. 
+
+Below are the details.
+
+### *Cloud*
+
+*Currently, the project is setup to be deployed locally, but it can be deployed to the cloud using Kubernetes (...)*
+
+
+### Experiment tracking and model registry
+
+MLflow is used to: 
+
+1- Track the model's name, hyperparameter valuess, accuracy score, model object  
+2- Add the trained models to the MLflow model registry  
+3- Transition the top 3 models to the staging phase  
+4- Transition the top 1 model to production and save it as an artifact*.  
+
+\* PS: I'm also saving the preprocessing code as a binary file with pickle, but I'm not using MLflow for this because I only need to save it once. 
+
+### Workflow orchestration
+
+In Mage, the following pipelines are created:
+
+**Prepare**  
+- Ingests the data
+- Splits the data into training and validation sets
+- Prepares the data by selecting the relevant columns, type casting,and imputing missing values
+- Transforms it using a dict vectorizor
+
+**Train**  
+- Initiates parallel training cycles for different models (RandomForrest, XGBClassifier, LogisticRegression, SVC, MLPClassifier)
+- Logs the relevant details using MLflow
+- Registers the trained models in MLflow's model registry
+
+**Deploy**  
+- Transitions the top 3 models to the staging phase
+- Transitions the top 1 model to the production phase
+- Create an API python script using Flask
+- Containerize the API into a docker file 
+
+**Predict**  
+
+**Monitoring**
+
+**Retrain**
+
+### * Model deployment
+
+The "Deploy" pipeline creates the model deployment dockerfile. 
+
+*discuss the actual model building process (maybe using a script), and retrain*
+
+### Model monitoring
+
+*discuss the monitoring dashboards - what they track, how they track it*  
+*discuss the alerting setup*  
+*discuss redeployment process that's triggered by the monitoring alerts*  
+
+### Reproducibility
+
+
+## TODO List
 
 - [x] problem description
 - [x] experiment tracking
@@ -9,6 +116,11 @@
 - [x] pip install requirements in mage container
 - [x] promote top model to production
 - [x] deployment - model container
+- [ ] add eda notebook from mleng week 7 to this docker
+- [ ] delete `import pandas as pd` from utils/data_preparation/prepare_data.py
+- [ ] move the split_train_test step from ingest block to prepare block
+- [ ] add evidently to mage requirements.txt
+- [ ] use mlflow to track training / validation datasets
 - [ ] split data by season  
 - [ ] remove line from train pipeline - train (transform) block - that selects 100 rows from data
 - [ ] model monitoring in grafana
@@ -34,13 +146,11 @@
 - [x] add model docker to docker-compose (might need to undo this step. if model is redeployed will have to restart docker compose)
 - [ ] save validation dataset
 - [ ] trouble shoot no database root error in postgres docker (delete all other dockers, re-add one-by-one see which one causes error)
+- [x] rename transformer load to promote
+- [x] clean data folders - make sure there is always 1 file only in data/test called dataset_1.csv
 
 ## Evaluation Criteria
 
-* Problem description
-    * 0 points: The problem is not described
-    * 1 point: The problem is described but shortly or not clearly 
-    * 2 points: The problem is well described and it's clear what the problem the project solves
 * Cloud
     * 0 points: Cloud is not used, things run only locally
     * 2 points: The project is developed on the cloud OR uses localstack (or similar tool) OR the project is deployed to Kubernetes or similar container management platforms
@@ -72,69 +182,6 @@
     * [ ] There's a Makefile (1 point)
     * [ ] There are pre-commit hooks (1 point)
     * [ ] There's a CI/CD pipeline (2 points)
-
-
-## Bank Marketing Problem Description
-
-In 2012 a Portuguese banking institution collected data for several direct marketing campaigns it conducted in order to analyze it and to build machine learning models that can increase the efficiency of future marketing campaigns.
-
-A marketing campaign is a concentrated effort by the bank in which it contacts its customers by phone and asks them to subscribe to a term deposit. Term deposits, aka certificate depoists, are deposits by customers that are made for a specific period of time and tradionally return more interest than savings accounts. They provide a guarantee for the banks that the money will remain available for a known period of time, which helps them better manage their available capitol.
-
-In this project, I'll be using the this dataset which can be downloaded from the UCI repository [here](https://archive.ics.uci.edu/dataset/222/bank+marketing)
-
-My goal is to train an ML model that can predict whether a customer will subscribe to a term deposit. I'll priortize profit making over regulating spending. In other words, I'll prefer a model with a lower false negative rate over one with a lower false positive rate. 
-
-The dataset has 16 features, and one target variable: 
-
-| Variable Name | Role     | Type        | Demographic       | Description | Units | Missing Values |
-|---------------|----------|-------------|-------------------|-------------|-------|----------------|
-| age           | Feature  | Integer     | Age               |             |       | no             |
-| job           | Feature  | Categorical | Occupation        |             |       | no             |
-| marital       | Feature  | Categorical | Marital Status    |             |       | no             |
-| education     | Feature  | Categorical | Education Level   |             |       | no             |
-| default       | Feature  | Binary      |                   | has credit in default? | | no |
-| balance       | Feature  | Integer     |                   | average yearly balance | euros | no |
-| housing       | Feature  | Binary      |                   | has housing loan? | | no |
-| loan          | Feature  | Binary      |                   | has personal loan? | | no |
-| contact       | Feature  | Categorical |                   | contact communication type (categorical: 'cellular','telephone') | | yes |
-| day_of_week   | Feature  | Date        |                   | last contact day of the week | | no |
-| month         | Feature  | Date        |                   | last contact month of year (categorical: 'jan', 'feb', 'mar', ..., 'nov', 'dec') | | no |
-| duration      | Feature  | Integer     |                   | last contact duration, in seconds (numeric). Important note: this attribute highly affects the output target (e.g., if duration=0 then y='no'). Yet, the duration is not known before a call is performed. Also, after the end of the call y is obviously known. Thus, this input should only be included for benchmark purposes and should be discarded if the intention is to have a realistic predictive model. | | no |
-| campaign      | Feature  | Integer     |                   | number of contacts performed during this campaign and for this client (numeric, includes last contact) | | no |
-| pdays         | Feature  | Integer     |                   | number of days that passed by after the client was last contacted from a previous campaign (numeric; -1 means client was not previously contacted) | | yes |
-| previous      | Feature  | Integer     |                   | number of contacts performed before this campaign and for this client | | no |
-| poutcome      | Feature  | Categorical |                   | outcome of the previous marketing campaign (categorical: 'failure','nonexistent','success') | | yes |
-| y             | Target   | Binary      |                   | has the client subscribed a term deposit? | | |:
-
-Plan layout:  
-1- Data preparation  
-2- Exploratory data analysis  
-3- Feature Engineering / Transformations  
-4- Model training and assessment   
-5- Deploy model using flask  
-6- Manage package dependency using Pipfile  
-7- Create a docker container image  
-
-
-#### Running the code 
-
-You can run the docker image of the app using this command:  
-
-`docker run -it --rm -p 9696:9696 bank-marketing`  
-
-To test the app, run the following command in a separate terminal:  
-
-`python predict-test.py`
-
-```bash
-# to build a docker image. 
-docker build -t response_predictor:v001 -f predict.dockerfile .
-
-docker run -it response_predictor:v001 /bin/bash
-
-# use the -p option to bind the image to a port to access the webservice
-docker run -it --rm -p 9696:9696 response_predictor:v001
-```
 
 
 grafana login

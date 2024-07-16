@@ -5,15 +5,15 @@ from sklearn.model_selection import train_test_split
 
 def split_data(df):
     # split the data into train/val/test with 80%/20%
-    X_train, X_test = train_test_split(df, test_size=np.round(len(df)*.2).astype(int), random_state=42)
+    return list(train_test_split(df, test_size=np.round(len(df)*.2).astype(int), random_state=42))
     
-    y_train = X_train.y
-    y_test = X_test.y
 
-    del X_train['y']
-    del X_test['y']
+def drop_target(df):
+    y = df.y
+    del df['y']
 
-    return X_train, X_test, y_train, y_test
+    X = df
+    return X, y
 
 
 def prepare_data(df):
@@ -26,4 +26,4 @@ def prepare_data(df):
     # drop duration
     df.drop('duration', axis=1, inplace=True)
 
-    return split_data(df)
+    return df

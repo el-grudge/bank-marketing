@@ -3,7 +3,7 @@ blocks:
   color: null
   configuration: {}
   downstream_blocks:
-  - load
+  - promote
   executor_config: null
   executor_type: local_python
   has_callback: false
@@ -25,14 +25,14 @@ blocks:
   executor_type: local_python
   has_callback: false
   language: python
-  name: load
+  name: promote
   retry_config: null
   status: updated
   timeout: null
   type: transformer
   upstream_blocks:
   - deploy_sensor
-  uuid: load
+  uuid: promote
 - all_upstream_blocks_executed: false
   color: null
   configuration: {}
@@ -47,7 +47,7 @@ blocks:
   timeout: null
   type: data_exporter
   upstream_blocks:
-  - load
+  - promote
   uuid: create_python_script
 - all_upstream_blocks_executed: false
   color: null
@@ -63,7 +63,7 @@ blocks:
   timeout: null
   type: data_exporter
   upstream_blocks:
-  - load
+  - promote
   uuid: create_dockerfile
 cache_block_output_in_memory: false
 callbacks: []

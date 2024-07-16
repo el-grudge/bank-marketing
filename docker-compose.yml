@@ -75,8 +75,10 @@ services:
     ports:
       - 6789:6789
     volumes:
+      - ./requirements.txt:/home/src/mlops/requirements.txt:ro
       - ./mlops/:/home/src/mlops
       - ./mlflow/artifacts:/home/src/mlflow/artifacts
+      - ./data/:/home/src/mlops/data
     networks:
       - app-network
       - back-tier      

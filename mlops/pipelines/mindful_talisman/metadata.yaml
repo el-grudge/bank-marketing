@@ -1,16 +1,18 @@
 blocks:
 - all_upstream_blocks_executed: true
   color: null
-  configuration: {}
+  configuration:
+    file_source:
+      path: data_loaders/ingest.py
   downstream_blocks:
-  - split
+  - prepare
   executor_config: null
   executor_type: local_python
   has_callback: false
   language: python
   name: ingest
   retry_config: null
-  status: updated
+  status: executed
   timeout: null
   type: data_loader
   upstream_blocks: []
@@ -18,24 +20,8 @@ blocks:
 - all_upstream_blocks_executed: true
   color: null
   configuration:
-    dynamic: true
-  downstream_blocks:
-  - prepare
-  executor_config: null
-  executor_type: local_python
-  has_callback: false
-  language: python
-  name: split
-  retry_config: null
-  status: executed
-  timeout: null
-  type: transformer
-  upstream_blocks:
-  - ingest
-  uuid: split
-- all_upstream_blocks_executed: true
-  color: null
-  configuration: {}
+    file_source:
+      path: transformers/prepare.py
   downstream_blocks:
   - build
   executor_config: null
@@ -48,12 +34,15 @@ blocks:
   timeout: null
   type: transformer
   upstream_blocks:
-  - split
+  - ingest
   uuid: prepare
 - all_upstream_blocks_executed: true
   color: null
-  configuration: {}
-  downstream_blocks: []
+  configuration:
+    file_source:
+      path: data_exporters/build.py
+  downstream_blocks:
+  - snowy_sun
   executor_config: null
   executor_type: local_python
   has_callback: false
@@ -66,18 +55,51 @@ blocks:
   upstream_blocks:
   - prepare
   uuid: build
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - twilight_sunrise
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: snowy sun
+  retry_config: null
+  status: executed
+  timeout: null
+  type: data_loader
+  upstream_blocks:
+  - build
+  uuid: snowy_sun
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: twilight sunrise
+  retry_config: null
+  status: executed
+  timeout: null
+  type: transformer
+  upstream_blocks:
+  - snowy_sun
+  uuid: twilight_sunrise
 cache_block_output_in_memory: false
 callbacks: []
 concurrency_config: {}
 conditionals: []
-created_at: '2024-07-15 03:05:08.638599+00:00'
+created_at: '2024-07-16 02:05:33.911189+00:00'
 data_integration: null
 description: null
 executor_config: {}
 executor_count: 1
 executor_type: null
 extensions: {}
-name: prepare
+name: mindful talisman
 notification_config: {}
 remote_variables_dir: null
 retry_config: {}
@@ -87,6 +109,6 @@ settings:
 spark_config: {}
 tags: []
 type: python
-uuid: prepare
+uuid: mindful_talisman
 variables_dir: /home/src/mage_data/mlops
 widgets: []

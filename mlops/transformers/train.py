@@ -14,7 +14,7 @@ def training(
 ): 
     # Specify your transformation logic here
     mlmodel_class = load_class(model_info)
-    X_train, X_val, y_train, y_val = training_set['build']
+    X_train, X_val, y_train, y_val = training_set
 
     X_train, X_val, y_train, y_val = X_train[:100], X_val[:100], y_train[:100], y_val[:100]
   

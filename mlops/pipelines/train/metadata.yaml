@@ -1,22 +1,20 @@
 blocks:
 - all_upstream_blocks_executed: true
   color: null
-  configuration:
-    global_data_product:
-      uuid: training_set
+  configuration: {}
   downstream_blocks:
   - train
   executor_config: null
   executor_type: local_python
   has_callback: false
   language: python
-  name: training_set
+  name: vectorize
   retry_config: null
   status: executed
   timeout: null
-  type: global_data_product
+  type: data_loader
   upstream_blocks: []
-  uuid: training_set
+  uuid: vectorize
 - all_upstream_blocks_executed: true
   color: teal
   configuration:
@@ -31,12 +29,12 @@ blocks:
   language: python
   name: load
   retry_config: null
-  status: updated
+  status: executed
   timeout: null
   type: custom
   upstream_blocks: []
   uuid: load
-- all_upstream_blocks_executed: false
+- all_upstream_blocks_executed: true
   color: null
   configuration:
     file_source:
@@ -49,14 +47,14 @@ blocks:
   language: python
   name: train
   retry_config: null
-  status: updated
+  status: executed
   timeout: null
   type: transformer
   upstream_blocks:
   - load
-  - training_set
+  - vectorize
   uuid: train
-- all_upstream_blocks_executed: false
+- all_upstream_blocks_executed: true
   color: null
   configuration:
     file_source:

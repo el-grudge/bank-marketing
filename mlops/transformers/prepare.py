@@ -1,3 +1,5 @@
+import pandas as pd
+from mlops.utils.data_preparation.prepare_data import drop_target
 from mlops.utils.data_preparation.transform_data import transform_data
 
 
@@ -6,9 +8,12 @@ if 'transformer' not in globals():
 
 
 @transformer
-def transform(data, *args, **kwargs):
-    X_train, X_val, y_train, y_val = data
+def transform(data, *args, **kwargs):    
+    key = data['name']
+
+    X, y = drop_target(pd.DataFrame(data['data']))
+
     # transform data 
-    X_train, X_val = transform_data(X_train), transform_data(X_val)
-    
-    return X_train, X_val, y_train, y_val
+    X = transform_data(X)
+
+    return X, y, key
