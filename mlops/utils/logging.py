@@ -1,6 +1,8 @@
 import os
 import pickle
 from typing import Dict, Optional, Tuple, Union
+from pandas import Series
+from scipy.sparse import csr_matrix
 
 import mlflow
 import mlflow.pyfunc
@@ -47,6 +49,8 @@ def track_experiment(
     run_name: Optional[str] = None,
     hyperparameters: Dict[str, Union[float, int, str]] = {},
     metrics: Dict[str, float] = {},
+    X: Optional[csr_matrix] = None,
+    predictions: Optional[Series] = None
     **kwargs,
 ):
     experiment_name = DEFAULT_EXPERIMENT_NAME
@@ -83,6 +87,9 @@ def track_experiment(
         for key, value in hyperparameters.items():
             client.log_param(run_id, key, value)
             print(f'Logged hyperparameter {key}: {value}.')
+
+        # for i, (input_data, prediction) in enumerate(zip(X, predictions)):
+        #     mlflow.log_metric(f"prediction_{i}", prediction, input_data=input_data.tolist())
 
         for key, value in metrics.items():
             client.log_metric(run_id, key, value)

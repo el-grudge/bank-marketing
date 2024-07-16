@@ -30,7 +30,9 @@ def train_model(
         run_id = callback(
             hyperparameters=model.get_params(),
             metrics=metrics,
-            model=model
+            model=model,
+            X=X_val,
+            predictions=y_pred
         )
 
     return model, metrics, y_pred, run_id

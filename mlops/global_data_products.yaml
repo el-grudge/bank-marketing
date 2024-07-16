@@ -1,9 +1,0 @@
-training_set:
-  object_type: pipeline
-  object_uuid: prepare
-  outdated_after:
-    seconds: 600
-  repo_path: /home/src/mlops
-  settings:
-    build:
-      partitions: 1

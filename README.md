@@ -32,10 +32,10 @@ The original dataset has 16 features, and one target variable:
 | poutcome      | feature  | categorical | outcome of the previous marketing campaign ('failure','nonexistent','success') | yes |
 | y             | target   | binary      | has the client subscribed a term deposit? | |:
 
-I'm discarding the following 5 features: marital, education, default, loan, duration. For more details on how the features relate to the target, check out the notebook [here](https://github.com/el-grudge/mleng-zoomcamp/blob/main/week_7/bank_marketing.ipynb).
+I'm discarding the following 5 features: marital, education, default, loan, duration. For more details on how the features relate to the target, check out the EDA notebook [here](./EDA.ipynb).
 
 
-Tech stack:  
+Tech stack:  kv
 1- MLflow for experiment tracking  
 2- Mage for orchestration  
 3- Evidently + Grafana for monitoring  
@@ -116,7 +116,7 @@ The "Deploy" pipeline creates the model deployment dockerfile.
 - [x] pip install requirements in mage container
 - [x] promote top model to production
 - [x] deployment - model container
-- [ ] add eda notebook from mleng week 7 to this docker
+- [x] add eda notebook from mleng week 7 to this docker
 - [ ] delete `import pandas as pd` from utils/data_preparation/prepare_data.py
 - [ ] move the split_train_test step from ingest block to prepare block
 - [ ] add evidently to mage requirements.txt
@@ -148,6 +148,7 @@ The "Deploy" pipeline creates the model deployment dockerfile.
 - [ ] trouble shoot no database root error in postgres docker (delete all other dockers, re-add one-by-one see which one causes error)
 - [x] rename transformer load to promote
 - [x] clean data folders - make sure there is always 1 file only in data/test called dataset_1.csv
+- [ ] figure out how to reference saved prediction so that you can link it to best model
 
 ## Evaluation Criteria
 

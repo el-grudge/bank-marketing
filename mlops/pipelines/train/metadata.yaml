@@ -8,13 +8,13 @@ blocks:
   executor_type: local_python
   has_callback: false
   language: python
-  name: vectorize
+  name: encode
   retry_config: null
-  status: executed
+  status: updated
   timeout: null
   type: data_loader
   upstream_blocks: []
-  uuid: vectorize
+  uuid: encode
 - all_upstream_blocks_executed: true
   color: teal
   configuration:
@@ -34,7 +34,7 @@ blocks:
   type: custom
   upstream_blocks: []
   uuid: load
-- all_upstream_blocks_executed: true
+- all_upstream_blocks_executed: false
   color: null
   configuration:
     file_source:
@@ -52,9 +52,9 @@ blocks:
   type: transformer
   upstream_blocks:
   - load
-  - vectorize
+  - encode
   uuid: train
-- all_upstream_blocks_executed: true
+- all_upstream_blocks_executed: false
   color: null
   configuration:
     file_source:

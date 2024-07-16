@@ -2,15 +2,14 @@ import mlflow.pyfunc
 from mlflow import MlflowClient
 from sklearn.metrics import accuracy_score
 
-if 'transformer' not in globals():
-    from mage_ai.data_preparation.decorators import transformer
+if 'data_exporter' not in globals():
+    from mage_ai.data_preparation.decorators import data_exporter
 
 
 client = MlflowClient()
 
-
-@transformer
-def transform(data, *args, **kwargs):
+@data_exporter
+def export_data(data, *args, **kwargs):
     model_name = 'bank_marketing'
     stage = 'production'
     filter_string = f"name = '{model_name}' and tag.stage = '{stage}'"

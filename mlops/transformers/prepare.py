@@ -11,9 +11,9 @@ if 'transformer' not in globals():
 def transform(data, *args, **kwargs):    
     key = data['name']
 
-    X, y = drop_target(pd.DataFrame(data['data']))
+    data, y = drop_target(pd.DataFrame(data['data']))
 
     # transform data 
-    X = transform_data(X)
+    X = transform_data(data)
 
-    return X, y, key
+    return data, X, y, key
