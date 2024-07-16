@@ -1,6 +1,3 @@
-import shutil
-from datetime import datetime
-
 from mlops.utils.data_preparation.prepare_data import ingest_data, prepare_data, cleanup
 
 if 'data_loader' not in globals():

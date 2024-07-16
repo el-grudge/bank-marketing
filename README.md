@@ -84,26 +84,40 @@ In Mage, the following pipelines are created:
 - Create an API python script using Flask
 - Containerize the API into a docker file 
 
-**Predict**  
+**Test**
+
+- Loads the test data using the same ingest-prepare-build blocks from the Prepare pipeline 
+- Transforms the loaded data
+- Loads the production model 
+- Makes predictions and prints+saves the accuracy metric
 
 **Monitoring**
 
+- Creates table `grafana.evidently_metrics` 
+- Loads the reference data (the validation data set) and the new test data
+- Creates a report that shows prediction drift, data drift, and missing values
+
 **Retrain**
 
-### * Model deployment
+### Model deployment
 
-The "Deploy" pipeline creates the model deployment dockerfile. 
+The "Deploy" pipeline creates 2 payloads:  
 
-*discuss the actual model building process (maybe using a script), and retrain*
+- Predict script: The production model is wrapped in a Flask API 
+- Predict dockerfile: The predict script containerized in a docker container
+
+Run the build command to build.
 
 ### Model monitoring
 
-*discuss the monitoring dashboards - what they track, how they track it*  
-*discuss the alerting setup*  
-*discuss redeployment process that's triggered by the monitoring alerts*  
+***In progress***  
+
+- *Grafana dashboard monitors the metrics created by evidently*
+- *Grafana alerts mage to retrain the model using webhooks*
 
 ### Reproducibility
 
+***In progress***
 
 ## TODO List
 
@@ -117,15 +131,16 @@ The "Deploy" pipeline creates the model deployment dockerfile.
 - [x] promote top model to production
 - [x] deployment - model container
 - [x] add eda notebook from mleng week 7 to this docker
-- [ ] delete `import pandas as pd` from utils/data_preparation/prepare_data.py
-- [ ] move the split_train_test step from ingest block to prepare block
-- [ ] add evidently to mage requirements.txt
+- [x] delete `import pandas as pd` from utils/data_preparation/prepare_data.py
+- [x] move the split_train_test step from ingest block to prepare block
+- [x] add evidently to mage requirements.txt
 - [ ] use mlflow to track training / validation datasets
-- [ ] split data by season  
-- [ ] remove line from train pipeline - train (transform) block - that selects 100 rows from data
+- [x] split data by season  
+- [x] remove line from train pipeline - train (transform) block - that selects 100 rows from data
 - [ ] model monitoring in grafana
+- [ ] build model monitoring dashboard in grafana
 - [ ] trigger retraining if performance decrease (test with data from different season)
-- [ ] modify ingest to read data from personal github repo instead of uci url, to get data for specific season
+- [x] modify ingest to read data from personal github repo instead of uci url, to get data for specific season
 - [ ] documentation
 - [ ] unit tests
 - [ ] integration test
@@ -138,44 +153,57 @@ The "Deploy" pipeline creates the model deployment dockerfile.
 - [ ] iac 
 - [ ] hyperparameter tuning
 - [x] copy only necessary files to mage docker container (./:/home/src copies everything)
-- [ ] add grafana to docker-compose
+- [x] add grafana to docker-compose
 - [x] create shared volumnes for all docker services (volumes) (doesn't work)
-- [ ] build model monitoring dashboard in grafana
 - [x] connect mlflow, mage, grafana to postgres service (mage is almost impossible to do)
 - [x] connect grafana to db 
 - [x] add model docker to docker-compose (might need to undo this step. if model is redeployed will have to restart docker compose)
-- [ ] save validation dataset
+- [x] save validation dataset
 - [ ] trouble shoot no database root error in postgres docker (delete all other dockers, re-add one-by-one see which one causes error)
 - [x] rename transformer load to promote
 - [x] clean data folders - make sure there is always 1 file only in data/test called dataset_1.csv
 - [ ] figure out how to reference saved prediction so that you can link it to best model
+- [ ] incorporate new data when retraining
+- [ ] save training data along with validation data, in test runs compare size of new data with training data
+- [ ] build retrainig model
+- [ ] build streamlit dashboard
+- [ ] save preprocessor as artifact with log_artifact
+- [ ] save training data features as artifact with log_artifact
+- [ ] save validation data features as artifact with log_artifact
+- [ ] grafana - show # of prediction drift months in alert
+- [ ] save grafana dashboard 
+- [ ] cleanup files in monitor folder
 
 ## Evaluation Criteria
 
+* Problem description
+    * 0 points: The problem is not described
+    * 1 point: The problem is described but shortly or not clearly
+    * [2] points: The problem is well described and it's clear what the problem the project solves
 * Cloud
-    * 0 points: Cloud is not used, things run only locally
+    * [0] points: Cloud is not used, things run only locally
     * 2 points: The project is developed on the cloud OR uses localstack (or similar tool) OR the project is deployed to Kubernetes or similar container management platforms
     * 4 points: The project is developed on the cloud and IaC tools are used for provisioning the infrastructure
 * Experiment tracking and model registry
     * 0 points: No experiment tracking or model registry
     * 2 points: Experiments are tracked or models are registered in the registry
-    * 4 points: Both experiment tracking and model registry are used
+    * [4] points: Both experiment tracking and model registry are used
 * Workflow orchestration
     * 0 points: No workflow orchestration
     * 2 points: Basic workflow orchestration
-    * 4 points: Fully deployed workflow 
+    * [4] points: Fully deployed workflow 
 * Model deployment
     * 0 points: Model is not deployed
     * 2 points: Model is deployed but only locally
-    * 4 points: The model deployment code is containerized and could be deployed to cloud or special tools for model deployment are used
+    * [4] points: The model deployment code is containerized and could be deployed to cloud or special tools for model deployment are used
 * Model monitoring
     * 0 points: No model monitoring
-    * 2 points: Basic model monitoring that calculates and reports metrics
+    * [2] points: Basic model monitoring that calculates and reports metrics
     * 4 points: Comprehensive model monitoring that sends alerts or runs a conditional workflow (e.g. retraining, generating debugging dashboard, switching to a different model) if the defined metrics threshold is violated
 * Reproducibility
     * 0 points: No instructions on how to run the code at all, the data is missing
     * 2 points: Some instructions are there, but they are not complete OR instructions are clear and complete, the code works, but the data is missing
-    * 4 points: Instructions are clear, it's easy to run the code, and it works. The versions for all the dependencies are specified.
+    * [4] points: Instructions are clear, it's easy to run the code, and it works. The versions for all the dependencies are specified.
 * Best practices
     * [ ] There are unit tests (1 point)
     * [ ] There is an integration test (1 point)
@@ -183,8 +211,3 @@ The "Deploy" pipeline creates the model deployment dockerfile.
     * [ ] There's a Makefile (1 point)
     * [ ] There are pre-commit hooks (1 point)
     * [ ] There's a CI/CD pipeline (2 points)
-
-
-grafana login
-
-admin / password

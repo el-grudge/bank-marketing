@@ -1,4 +1,3 @@
-import pandas as pd
 from mlops.utils.logging import track_experiment
 from mlops.utils.models.model_training import load_class, train_model
 
@@ -19,7 +18,7 @@ def training(
 
     # X_train, X_val, y_train, y_val = X_train[:100], X_val[:100], y_train[:100], y_val[:100]
   
-    model, metrics, y_pred, run_id = train_model(
+    model, metrics, run_id = train_model(
         mlmodel_class(),
         X_train,
         y_train,
@@ -28,11 +27,6 @@ def training(
         callback=lambda **opts: track_experiment(**{**opts, **kwargs}),
         random_state=42,
     )
-
-    y_pred = pd.Series(y_pred)
-    y_pred.name = 'preds'
-
-    y_pred.to_csv('mlops/data/monitor/reference_preds.csv', header=True, index=False)
 
     return run_id, model, metrics
     

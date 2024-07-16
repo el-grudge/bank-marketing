@@ -21,18 +21,21 @@ def train_model(
     model.fit(X_train, y_train)
 
     metrics = None
-    y_pred = model.predict(X_val)
+    train_pred = model.predict(X_train)
+    val_pred = model.predict(X_val)
 
-    accuracy = accuracy_score(y_val, y_pred)
-    metrics = {'accuracy': accuracy}
+    predictions = {'train': train_pred ,'val': val_pred}
+    metrics = [
+        {'train_accuracy': accuracy_score(y_train, train_pred)}, 
+        {'val_accuracy': accuracy_score(y_val, val_pred)}
+        ]
 
     if callback:
         run_id = callback(
             hyperparameters=model.get_params(),
             metrics=metrics,
             model=model,
-            X=X_val,
-            predictions=y_pred
+            predictions=predictions
         )
 
-    return model, metrics, y_pred, run_id
+    return model, metrics, run_id

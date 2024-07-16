@@ -1,7 +1,4 @@
-import os
-import shutil
 import pickle
-from datetime import datetime
 from mlops.utils.data_preparation.prepare_data import cleanup
 
 if 'data_exporter' not in globals():
@@ -12,12 +9,13 @@ def export(data, *args, **kwargs):
     df, X, y, filename = data
 
     folder = 'mlops/data/monitor'
+    features_filename = f'reference_features_{filename}.csv'
     
-    cleanup(folder, 'reference.csv')
-    df.to_csv(f'{folder}/reference.csv', index=False)
+    cleanup(folder, features_filename)
+    df.to_csv(f'{folder}/{features_filename}', index=False)
     
-    folder = f'mlops/data/{filename}'
     # Save X and y using pickle
+    folder = f'mlops/data/{filename}'
     cleanup(folder, f'{filename}.pkl')
     with open(f'{folder}/{filename}.pkl', 'wb') as f_out:
         pickle.dump((X, y), f_out)

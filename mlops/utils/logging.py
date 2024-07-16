@@ -1,7 +1,7 @@
 import os
 import pickle
-from typing import Dict, Optional, Tuple, Union
-from pandas import Series
+from typing import Dict, Optional, Union, List
+from pandas import Series, read_csv
 from scipy.sparse import csr_matrix
 
 import mlflow
@@ -9,9 +9,6 @@ import mlflow.pyfunc
 from mlflow import MlflowClient
 from mlflow.sklearn import log_model as log_model_sklearn
 from mlflow.xgboost import log_model as log_model_xgboost
-from mlflow.sklearn import save_model as save_model_sklearn
-from mlflow.xgboost import save_model as save_model_xgboost
-from mlflow.entities import ViewType
 import xgboost as xgb
 from sklearn.base import BaseEstimator
 
@@ -48,9 +45,8 @@ def track_experiment(
     pipeline_uuid: Optional[str] = None,
     run_name: Optional[str] = None,
     hyperparameters: Dict[str, Union[float, int, str]] = {},
-    metrics: Dict[str, float] = {},
-    X: Optional[csr_matrix] = None,
-    predictions: Optional[Series] = None
+    metrics: Optional[List] = {},
+    predictions: Optional[Dict[str, Series]] = None,
     **kwargs,
 ):
     experiment_name = DEFAULT_EXPERIMENT_NAME
@@ -88,37 +84,44 @@ def track_experiment(
             client.log_param(run_id, key, value)
             print(f'Logged hyperparameter {key}: {value}.')
 
-        # for i, (input_data, prediction) in enumerate(zip(X, predictions)):
-        #     mlflow.log_metric(f"prediction_{i}", prediction, input_data=input_data.tolist())
+        train_file_path = 'mlops/data/monitor/reference_features_train.csv'# training data
+        mlflow.log_artifact(train_file_path, 'data')
 
-        for key, value in metrics.items():
-            client.log_metric(run_id, key, value)
-            print(f'Logged metric {key}: {value}.')
+        val_file_path = 'mlops/data/monitor/reference_features_val.csv' # training data
+        mlflow.log_artifact(val_file_path, 'data')
+        
+        for key, value in predictions.items():
+            file_path = f'mlops/data/monitor/reference_preds_{key}_{run_id}.csv'
+            train_pred = Series(value)
+            train_pred.name = 'prediction'
+            train_pred.to_csv(file_path, header=True, index=False)
+            mlflow.log_artifact(file_path, 'data')
+
+        for metric in metrics:
+            for key, value in metric.items():
+                client.log_metric(run_id, key, value)
+                print(f'Logged metric {key}: {value}.')
 
         if model:
             log_model = None
 
             if isinstance(model, BaseEstimator):
                 log_model = log_model_sklearn
-                # log_model = save_model_sklearn
             elif isinstance(model, xgb.Booster):
                 log_model = log_model_xgboost
-                # log_model = save_model_xgboost
 
             if log_model:
                 opts = dict(artifact_path='model', input_example=None)
-                # opts = dict(f'models/{run_id}', input_example=None)
 
                 model_info = log_model(model, **opts)
                 print(model_info.model_uri)
-                # model_info = log_model(model, f'models/{run_id}')
                 print(f'Logged model {model.__class__.__name__} at {model_info.model_uri}. Model uuid is {model_info.model_uuid}, and run_id is {model_info.run_id}')
 
     return run_id
-    
-    
+
+
 def register_model(run_id, accuracy_score=0.5, model_name=model_name):
-    run_score = client.get_metric_history(run_id, 'accuracy')[0].value
+    run_score = client.get_metric_history(run_id, 'val_accuracy')[0].value
     
     if run_score >= accuracy_score:
         model_uri = f"runs:/{run_id}/model"
@@ -140,7 +143,7 @@ def get_top_n(mlmodels, n=3, asc=True):
         run = client.get_run(run_id)
         if run:
             # Get the accuracy metric (adjust 'accuracy' as needed)
-            accuracy = run.data.metrics.get('accuracy', None)
+            accuracy = run.data.metrics.get('val_accuracy', None)
             
             if accuracy is not None:
                 staging_scores.append({'mlmodel': mlmodel, 'run_id': run_id, 'accuracy_score': accuracy})

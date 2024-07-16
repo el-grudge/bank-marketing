@@ -5,7 +5,9 @@ import pandas as pd
 import psycopg2 as psycopg
 import joblib
 import calendar
-import hashlib
+
+import mlflow.pyfunc
+from mlflow import MlflowClient
 
 from evidently.report import Report
 from evidently import ColumnMapping
@@ -32,9 +34,25 @@ create table grafana.evidently_metrics(
 )
 """
 
-reference_data = pd.read_csv('mlops/data/monitor/reference.csv') # validation data
-predictions = pd.read_csv('mlops/data/monitor/reference_preds.csv')
-reference_data['prediction'] = predictions['preds']
+def download_artifact(run_id, path):
+	artifact_path = mlflow.artifacts.download_artifacts(run_id=run_id,artifact_path=path)
+	return pd.read_csv(artifact_path)
+
+# mlflow search + download setup
+client = MlflowClient()
+model_name = 'bank_marketing'
+stage = 'production'
+filter_string = f"name = '{model_name}' and tag.stage = '{stage}'"
+mlmodel = client.search_model_versions(filter_string)
+
+fileinfo = mlflow.artifacts.list_artifacts(run_id=mlmodel[0].run_id,artifact_path='data')
+reference_features = download_artifact(mlmodel[0].run_id,fileinfo[0].path) # validation data
+# reference_features = download_artifact(mlmodel[0].run_id,fileinfo[1].path) # validation data
+reference_preds = download_artifact(mlmodel[0].run_id,fileinfo[2].path)
+reference_data = pd.concat([reference_features, reference_preds], axis=1)
+
+model_uri = mlmodel[0].source
+model = mlflow.pyfunc.load_model(model_uri)
 
 with open('mlflow/artifacts/preprocessor.b', 'rb') as f_in: # load production_model
 	dv = joblib.load(f_in)
@@ -48,6 +66,7 @@ raw_data, y = drop_target(raw_data)
 
 num_features = ['age', 'balance', 'day_of_week', 'campaign', 'pdays', 'previous']
 cat_features = ['job', 'housing', 'contact', 'month', 'poutcome']
+
 column_mapping = ColumnMapping(
     prediction='prediction',
     numerical_features=num_features,

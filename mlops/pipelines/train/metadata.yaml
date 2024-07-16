@@ -10,7 +10,7 @@ blocks:
   language: python
   name: encode
   retry_config: null
-  status: updated
+  status: executed
   timeout: null
   type: data_loader
   upstream_blocks: []
@@ -34,7 +34,7 @@ blocks:
   type: custom
   upstream_blocks: []
   uuid: load
-- all_upstream_blocks_executed: false
+- all_upstream_blocks_executed: true
   color: null
   configuration:
     file_source:
@@ -54,7 +54,7 @@ blocks:
   - load
   - encode
   uuid: train
-- all_upstream_blocks_executed: false
+- all_upstream_blocks_executed: true
   color: null
   configuration:
     file_source:

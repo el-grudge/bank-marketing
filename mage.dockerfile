@@ -7,9 +7,7 @@ RUN adduser --disabled-password --gecos '' mage && adduser mage mage
 
 # Grant the user permissions to the Mage related directories
 RUN mkdir /home/src/mage_data; chown -R mage /home/src/mage_data
-RUN mkdir /home/src/default_repo; chown -R mage /home/src/default_repo
-
-RUN pip3 install -r path/to/requirements.txt
+RUN mkdir /home/src/mlops; chown -R mage /home/src/mlops
 
 # Set the Mage user
 USER mage

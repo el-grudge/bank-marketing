@@ -8,8 +8,10 @@ if 'data_exporter' not in globals():
 
 @data_exporter
 def export_data(data, *args, **kwargs):
-     run_id, _, _ = data
+    run_id, _, _ = data
 
-     accuracy_score = 0.7
+    accuracy_score = 0.7
+
+    model_name = 'bank_marketing'
      
-     register_model(run_id, accuracy_score)
+    register_model(run_id, accuracy_score, model_name)
