@@ -61,42 +61,6 @@ MLflow is used to:
 
 In Mage, the following pipelines are created:
 
-<style>
-    .flex-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 20px; /* Adjust the gap as needed */
-        flex-wrap: wrap;
-    }
-    .flex-item {
-        text-align: center;
-    }
-</style>
-
-<div class="flex-container">
-    <div class="flex-item">
-        <img src="./images/prepare.png" alt="Prepare" width="100" height="200">
-        <div>Prepare</div>
-    </div>
-    <div class="flex-item">
-        <img src="./images/train.png" alt="Train" width="200" height="200">
-        <div>Train</div>
-    </div>
-    <div class="flex-item">
-        <img src="./images/deploy.png" alt="Deploy" width="200" height="200">
-        <div>Deploy</div>
-    </div>
-    <div class="flex-item">
-        <img src="./images/test.png" alt="Test" width="100" height="200">
-        <div>Test</div>
-    </div>
-    <div class="flex-item">
-        <img src="./images/monitor.png" alt="Monitor" width="120" height="200">
-        <div>Monitor</div>
-    </div>
-</div>
-
 **Prepare**  
 
 - Ingests the data
