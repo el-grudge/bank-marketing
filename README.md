@@ -149,7 +149,7 @@ docker ps
 
 You should see an output like this
 
-[]
+![dockerps](./images/docker-status.png)
 
 Now, go to [Mage](http://localhost:6789) and navigate to the pipeline page where you will see the 6 deployed pipelines
 
