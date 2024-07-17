@@ -61,9 +61,43 @@ MLflow is used to:
 
 In Mage, the following pipelines are created:
 
-**Prepare**  
+<style>
+    .flex-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px; /* Adjust the gap as needed */
+        flex-wrap: wrap;
+    }
+    .flex-item {
+        text-align: center;
+    }
+</style>
 
-<img src="images/prepare.png" width="50" height="125">
+<div class="flex-container">
+    <div class="flex-item">
+        <img src="./images/prepare.png" alt="Prepare" width="100" height="200">
+        <div>Prepare</div>
+    </div>
+    <div class="flex-item">
+        <img src="./images/train.png" alt="Train" width="200" height="200">
+        <div>Train</div>
+    </div>
+    <div class="flex-item">
+        <img src="./images/deploy.png" alt="Deploy" width="200" height="200">
+        <div>Deploy</div>
+    </div>
+    <div class="flex-item">
+        <img src="./images/test.png" alt="Test" width="100" height="200">
+        <div>Test</div>
+    </div>
+    <div class="flex-item">
+        <img src="./images/monitor.png" alt="Monitor" width="120" height="200">
+        <div>Monitor</div>
+    </div>
+</div>
+
+**Prepare**  
 
 - Ingests the data
 - Splits the data into training and validation sets
@@ -169,11 +203,14 @@ Run the pipelines in the following error:
 
 To view the logged models and the model registry go to [MLflow](http://localhost:5000).
 
-[]
+![mlflow_tracking](./images/mlflow_tracking.png)
+![mlflow_registry](./images/mlflow_registry.png)
 
 To view the monitoring dashboard go to [Grafana](http://localhost:3000).
 
-[]
+![grafana](./images/grafana.png)
+
+❗Grafana's initial credentials are admin/admin.    
 
 ## TODO List
 
@@ -197,7 +234,8 @@ To view the monitoring dashboard go to [Grafana](http://localhost:3000).
 - [ ] build model monitoring dashboard in grafana
 - [ ] trigger retraining if performance decrease (test with data from different season)
 - [x] modify ingest to read data from personal github repo instead of uci url, to get data for specific season
-- [ ] documentation
+- [x] documentation
+- [ ] documentation with cloud
 - [ ] unit tests
 - [ ] integration test
 - [ ] linting / formatting
