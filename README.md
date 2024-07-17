@@ -34,12 +34,13 @@ I'm discarding the following 5 features: marital, education, default, loan, dura
 
 
 Tech stack:  
-1- MLflow for experiment tracking and resgistration  
-2- Mage for orchestration  
-3- Evidently + Grafana for monitoring  
-4- Docker + Flask API for deployment  
-5- Docker-compose for running multi-container applications  
-6- Postgres database to store tracking, orchestration, and monitoring data
+
+1. MLflow for experiment tracking and resgistration  
+2. Mage for orchestration  
+3. Evidently + Grafana for monitoring  
+4. Docker + Flask API for deployment  
+5. Docker-compose for running multi-container applications  
+6. Postgres database to store tracking, orchestration, and monitoring data
 
 In the worfklow, I train multiple binary classifiers, deploy the best performing one, and monitor its performance. 
 
@@ -49,12 +50,12 @@ Below are the details.
 
 MLflow is used to: 
 
-1- Track the model's name, hyperparameter valuess, accuracy score, model object  
-2- Add the trained models to the MLflow model registry  
-3- Transition the top 3 models to the staging phase  
-4- Transition the top 1 model to production and save it as an artifact*.  
+1. Track the model's name, hyperparameter valuess, accuracy score, model object  
+2. Add the trained models to the MLflow model registry  
+3. Transition the top 3 models to the staging phase  
+4. Transition the top 1 model to production and save it as an artifact*.  
 
-\* PS: I'm also saving the preprocessing code as a binary file with pickle, but I'm not using MLflow for this because I only need to save it once. 
+❕ PS: I'm also saving the preprocessing code as a binary file with pickle, but I'm not using MLflow for this because I only need to save it once. 
 
 ### Workflow orchestration
 
@@ -92,14 +93,20 @@ In Mage, the following pipelines are created:
 
 **Retrain**
 
+- Triggers a retraining cycle
+
 ### Model deployment
 
 The "Deploy" pipeline creates 2 payloads:  
 
-- Predict script: The production model is wrapped in a Flask API 
-- Predict dockerfile: The predict script containerized in a docker container
+- [predict.py](./mlops/payloads/predict.py) script: The production model is wrapped in a Flask API 
+- [predict.dockerfile](./mlops/payloads/predict.dockerfile): The predict script containerized in a docker container
 
-Run the build command to build.
+To build the docker container run this command
+
+```bash
+docker build -t predict:v01 -f ./mlops/payloads/predict.dockerfile .
+```
 
 ### Model monitoring
 
@@ -110,11 +117,60 @@ Run the build command to build.
 
 ### *Cloud*
 
-*Currently, the project is setup to be deployed locally, (...)*
+⚠️ Currently, the project is setup to be deployed locally (...)
 
 ### Reproducibility
 
-***In progress***
+#### Prerequisite
+
+To install the prerequisites you can follow the instructions [here](./docs/setup.md) 
+
+#### Deployment
+
+Next, clone this rep and move into the project directory
+
+```bash
+git clone https://github.com/el-grudge/bank-marketing.git && cd bank-marketing
+```
+
+Once inside, run this command to start the services (Postgres, adminer, Grafana, Mage, MLflow):
+
+```bash
+docker-compose up
+```
+
+❕To capture back the prompt use the `--d` option when running the above command.
+
+To validate that the services are up and running running this command
+
+```bash
+docker ps
+```
+
+You should see an output like this
+
+[]
+
+Now, go to [Mage](http://localhost:6789) and navigate to the pipeline page where you will see the 6 deployed pipelines
+
+[]
+
+Run the pipelines in the following error:
+
+1. Prepare: Will ingest and prepare the data  
+2. Train: Will train multiple classifiers, track the training data, the models, their hyperparameters, and metrics, and add them to the model registry  
+3. Deploy: Will transition the top 3 models to the staging stage, then move the top model to the production phase. Will also create the Flask API and inference endpoint using the production model, and the docker container that hosts the Flask API  
+4. Test: Will load and prepare the test data, load the production model, and use it for inference on the test data  
+5. Monitor: Will compare the validation data (reference) with the test data (current) and look for prediction drift, column drift, and number of missing values. Will create a table and store this information in it  
+6. Retrain: Will trigger a new training run  
+
+To view the logged models and the model registry go to [MLflow](http://localhost:5000).
+
+[]
+
+To view the monitoring dashboard go to [Grafana](http://localhost:3000).
+
+[]
 
 ## TODO List
 
@@ -163,7 +219,7 @@ Run the build command to build.
 - [ ] incorporate new data when retraining
 - [ ] save training data along with validation data, in test runs compare size of new data with training data
 - [ ] build retrainig model
-- [ ] build streamlit dashboard
+- [ ] create command center dashboard with streamlit
 - [ ] save preprocessor as artifact with log_artifact
 - [x] save training data features as artifact with log_artifact
 - [x] save validation data features as artifact with log_artifact

@@ -54,9 +54,7 @@ services:
       - app-network
       
   magic:
-    build:
-      context: .
-      dockerfile: mage.dockerfile
+    image: mageai/mageai:latest
     container_name: magic-postgres
     depends_on:
       - postgresdb
