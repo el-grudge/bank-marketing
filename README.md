@@ -62,6 +62,9 @@ MLflow is used to:
 In Mage, the following pipelines are created:
 
 **Prepare**  
+
+<img src="images/prepare.png" width="50" height="125">
+
 - Ingests the data
 - Splits the data into training and validation sets
 - Prepares the data by selecting the relevant columns, type casting,and imputing missing values
@@ -153,7 +156,7 @@ You should see an output like this
 
 Now, go to [Mage](http://localhost:6789) and navigate to the pipeline page where you will see the 6 deployed pipelines
 
-[]
+![pipelines](./images/pipelines.png)
 
 Run the pipelines in the following error:
 
