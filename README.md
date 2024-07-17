@@ -1,5 +1,3 @@
-# banking-marketing
-
 ## Bank Marketing 
 
 ### Problem description
@@ -8,7 +6,7 @@ In 2012 a Portuguese banking institution collected data for several direct marke
 
 A marketing campaign is a concentrated effort by the bank in which it contacts its customers by phone and asks them to subscribe to a term deposit. Term deposits, aka certificate depoists, are deposits by customers that are made for a specific period of time and tradionally return more interest than savings accounts. They provide a guarantee for the banks that the money will remain available for a known period of time, which helps them better manage their available capitol.
 
-In this project, I'll be using the this dataset to create an end-to-end MLOps dashboard to train, deploy, and monitor an ML model that predicts whether a customer subscribes to a term depoist. The data set can be downloaded [here](https://archive.ics.uci.edu/dataset/222/bank+marketing).
+In this project, I'll be using the this dataset to create an end-to-end MLOps dashboard to train, deploy, and monitor an ML model that predicts whether a customer subscribes to a term deposit. The data set can be downloaded [here](https://archive.ics.uci.edu/dataset/222/bank+marketing).
 
 The original dataset has 16 features, and one target variable: 
 
@@ -35,22 +33,17 @@ The original dataset has 16 features, and one target variable:
 I'm discarding the following 5 features: marital, education, default, loan, duration. For more details on how the features relate to the target, check out the EDA notebook [here](./EDA.ipynb).
 
 
-Tech stack:  kv
-1- MLflow for experiment tracking  
+Tech stack:  
+1- MLflow for experiment tracking and resgistration  
 2- Mage for orchestration  
 3- Evidently + Grafana for monitoring  
-4- Flask for creating an API  
-5- Docker + Docker-compose for deployment  
+4- Docker + Flask API for deployment  
+5- Docker-compose for running multi-container applications  
 6- Postgres database to store tracking, orchestration, and monitoring data
 
 In the worfklow, I train multiple binary classifiers, deploy the best performing one, and monitor its performance. 
 
 Below are the details.
-
-### *Cloud*
-
-*Currently, the project is setup to be deployed locally, but it can be deployed to the cloud using Kubernetes (...)*
-
 
 ### Experiment tracking and model registry
 
@@ -115,6 +108,10 @@ Run the build command to build.
 - *Grafana dashboard monitors the metrics created by evidently*
 - *Grafana alerts mage to retrain the model using webhooks*
 
+### *Cloud*
+
+*Currently, the project is setup to be deployed locally, (...)*
+
 ### Reproducibility
 
 ***In progress***
@@ -134,7 +131,7 @@ Run the build command to build.
 - [x] delete `import pandas as pd` from utils/data_preparation/prepare_data.py
 - [x] move the split_train_test step from ingest block to prepare block
 - [x] add evidently to mage requirements.txt
-- [ ] use mlflow to track training / validation datasets
+- [x] use mlflow to track training / validation datasets
 - [x] split data by season  
 - [x] remove line from train pipeline - train (transform) block - that selects 100 rows from data
 - [ ] model monitoring in grafana
@@ -151,7 +148,7 @@ Run the build command to build.
 - [ ] mlflow experiment registry - cloud
 - [ ] workflow orchestration - cloud (check volumes in docker_compose.yaml, don't upload ssh keys to cloud)
 - [ ] iac 
-- [ ] hyperparameter tuning
+- [ ] hyperparameter tuning with hyperops
 - [x] copy only necessary files to mage docker container (./:/home/src copies everything)
 - [x] add grafana to docker-compose
 - [x] create shared volumnes for all docker services (volumes) (doesn't work)
@@ -162,14 +159,14 @@ Run the build command to build.
 - [ ] trouble shoot no database root error in postgres docker (delete all other dockers, re-add one-by-one see which one causes error)
 - [x] rename transformer load to promote
 - [x] clean data folders - make sure there is always 1 file only in data/test called dataset_1.csv
-- [ ] figure out how to reference saved prediction so that you can link it to best model
+- [x] figure out how to reference saved prediction so that you can link it to best model
 - [ ] incorporate new data when retraining
 - [ ] save training data along with validation data, in test runs compare size of new data with training data
 - [ ] build retrainig model
 - [ ] build streamlit dashboard
 - [ ] save preprocessor as artifact with log_artifact
-- [ ] save training data features as artifact with log_artifact
-- [ ] save validation data features as artifact with log_artifact
+- [x] save training data features as artifact with log_artifact
+- [x] save validation data features as artifact with log_artifact
 - [ ] grafana - show # of prediction drift months in alert
 - [ ] save grafana dashboard 
 - [ ] cleanup files in monitor folder
