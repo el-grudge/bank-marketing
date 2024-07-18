@@ -1,9 +1,26 @@
 blocks:
 - all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    file_source:
+      path: sensors/watch.py
+  downstream_blocks:
+  - monitor
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: watch
+  retry_config: null
+  status: not_executed
+  timeout: null
+  type: sensor
+  upstream_blocks: []
+  uuid: watch
+- all_upstream_blocks_executed: false
   color: pink
   configuration: {}
-  downstream_blocks:
-  - listener
+  downstream_blocks: []
   executor_config: null
   executor_type: local_python
   has_callback: false
@@ -13,24 +30,9 @@ blocks:
   status: executed
   timeout: null
   type: custom
-  upstream_blocks: []
-  uuid: monitor
-- all_upstream_blocks_executed: true
-  color: teal
-  configuration: {}
-  downstream_blocks: []
-  executor_config: null
-  executor_type: local_python
-  has_callback: false
-  language: python
-  name: listener
-  retry_config: null
-  status: failed
-  timeout: null
-  type: custom
   upstream_blocks:
-  - monitor
-  uuid: listener
+  - watch
+  uuid: monitor
 cache_block_output_in_memory: false
 callbacks: []
 concurrency_config: {}

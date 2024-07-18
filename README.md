@@ -194,7 +194,7 @@ To view the monitoring dashboard go to [Grafana](http://localhost:3000).
 - [x] use mlflow to track training / validation datasets
 - [x] split data by season  
 - [x] remove line from train pipeline - train (transform) block - that selects 100 rows from data
-- [ ] model monitoring in grafana
+- [x] model monitoring in grafana
 - [ ] build model monitoring dashboard in grafana
 - [ ] trigger retraining if performance decrease (test with data from different season)
 - [x] modify ingest to read data from personal github repo instead of uci url, to get data for specific season
@@ -231,6 +231,19 @@ To view the monitoring dashboard go to [Grafana](http://localhost:3000).
 - [ ] grafana - show # of prediction drift months in alert
 - [ ] save grafana dashboard 
 - [ ] cleanup files in monitor folder
+- [ ] try apply_provisioning.sh with the right permissions
+- [ ] try persisting email and webhook contacts and policies
+- [ ] break monitoring pipeline into multiple steps with sql blco
+- [ ] when monitoring figure out how to retrieve last training data to use as reference
+- [ ] deploy model as lambda service
+- [ ] remove "drop table" from monitoring create table sql
+- [ ] insert into evidently table with tiemstamp column
+- [ ] add validation data into training prod model - modify deploy pipeline accordingly
+- [ ] evidently presets, test_suite, test_suite presets
+- [ ] troubleshoot data drift - why so many columns
+- [ ] alternative trigerring with evidently 
+- [ ] future - replace mage with prefect
+- [ ] fix notification policy perisistence - it reverts back to 5 minute firing
 
 ## Evaluation Criteria
 

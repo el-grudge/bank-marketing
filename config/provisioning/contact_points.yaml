@@ -1,0 +1,13 @@
+apiVersion: 1
+
+contactPoints:
+  - orgId: 1
+    name: webhook
+    receivers:
+      - uid: webhook_uid
+        type: webhook
+        settings:
+          url: http://magic:6790/alert
+          httpMethod: POST
+          title: predict drift alert
+          message: prediction drift detected

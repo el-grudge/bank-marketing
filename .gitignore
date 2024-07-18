@@ -9,3 +9,14 @@ mage_data/mlops/.operation_history/
 mage_data/mlops/pipelines/*/.logs
 mage_data/mlops/pipelines/*/.variables
 nohup.out
+dontsave.md
+mlops/payloads/alert_*
+data/monitor/archive/reference_features_test.csv_*
+data/monitor/archive/reference_features_train.csv_*
+data/monitor/archive/reference_features_val.csv_*
+data/monitor/reference_preds_train_*
+data/monitor/reference_preds_val_*
+data/test/archive/dataset.csv_*
+data/test/archive/test.pkl_*
+data/train/archive/train.pkl_*
+data/val/archive/val.pkl_*
