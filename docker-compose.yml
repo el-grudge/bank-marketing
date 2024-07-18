@@ -101,7 +101,7 @@ services:
       - ./config/provisioning/grafana_dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml:ro
       - ./config/provisioning/alert_rules.yaml:/etc/grafana/provisioning/alerting/alert_rules.yaml:ro
       - ./config/provisioning/contact_points.yaml:/etc/grafana/provisioning/alerting/contact_points.yaml:ro
-      - ./config/provisioning/notification-policies.yaml:/etc/grafana/provisioning/alerting/alert_rules.yaml:ro
+      - ./config/provisioning/notification-policies.yaml:/etc/grafana/provisioning/alerting/notification-policies.yaml
       - ./config/dashboards:/opt/grafana/dashboards
       - ./config/grafana.ini:/etc/grafana/grafana.ini:ro
     networks:

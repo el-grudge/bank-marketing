@@ -232,7 +232,7 @@ To view the monitoring dashboard go to [Grafana](http://localhost:3000).
 - [ ] save grafana dashboard 
 - [ ] cleanup files in monitor folder
 - [ ] try apply_provisioning.sh with the right permissions
-- [ ] try persisting email and webhook contacts and policies
+- [x] try persisting email and webhook contacts and policies
 - [ ] break monitoring pipeline into multiple steps with sql blco
 - [ ] when monitoring figure out how to retrieve last training data to use as reference
 - [ ] deploy model as lambda service
