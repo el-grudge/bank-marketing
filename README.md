@@ -287,8 +287,8 @@ To interact with the model through streamlit dashboard go to [Streamlit app](htt
     * [4] points: The model deployment code is containerized and could be deployed to cloud or special tools for model deployment are used
 * Model monitoring
     * 0 points: No model monitoring
-    * [2] points: Basic model monitoring that calculates and reports metrics
-    * 4 points: Comprehensive model monitoring that sends alerts or runs a conditional workflow (e.g. retraining, generating debugging dashboard, switching to a different model) if the defined metrics threshold is violated
+    * 2 points: Basic model monitoring that calculates and reports metrics
+    * [4] points: Comprehensive model monitoring that sends alerts or runs a conditional workflow (e.g. retraining, generating debugging dashboard, switching to a different model) if the defined metrics threshold is violated
 * Reproducibility
     * 0 points: No instructions on how to run the code at all, the data is missing
     * 2 points: Some instructions are there, but they are not complete OR instructions are clear and complete, the code works, but the data is missing
