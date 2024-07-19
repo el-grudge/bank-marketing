@@ -176,12 +176,12 @@ Now, go to [Mage](http://localhost:6789) and navigate to the pipeline page where
 
 Run the pipelines in the following order:
 
-1. Prepare: Will ingest and prepare the data  
-2. Train: Will train multiple classifiers, track the training data, the models, their hyperparameters, and metrics, and add them to the model registry  
-3. Deploy: Will transition the top 3 models to the staging stage, then move the top model to the production phase. Will also create the Flask API and inference endpoint using the production model, and the docker container that hosts the Flask API  
-4. Test: Will load and prepare the test data, load the production model, and use it for inference on the test data  
-5. Monitor: Will compare the validation data (reference) with the test data (current) and look for prediction drift, column drift, and number of missing values. Will create a table and store this information in it  
-6. Retrain: Will trigger a new training run  
+1. [Prepare](http://localhost:6789/pipelines/prepare/triggers): Will ingest and prepare the data  
+2. [Train](http://localhost:6789/pipelines/train/triggers): Will train multiple classifiers, track the training data, the models, their hyperparameters, and metrics, and add them to the model registry  
+3. [Deploy](http://localhost:6789/pipelines/deploy/triggers): Will transition the top 3 models to the staging stage, then move the top model to the production phase. Will also create the Flask API and inference endpoint using the production model, and the docker container that hosts the Flask API  
+4. [Test](http://localhost:6789/pipelines/test/triggers): Will load and prepare the test data, load the production model, and use it for inference on the test data  
+5. [Monitor](http://localhost:6789/pipelines/monitor/triggers): Will compare the validation data (reference) with the test data (current) and look for prediction drift, column drift, and number of missing values. Will create a table and store this information in it  
+6. [Retrain](http://localhost:6789/pipelines/retrain/triggers): Will trigger a new training run  
 
 To view the logged models and the model registry go to [MLflow](http://localhost:5000).
 
