@@ -72,6 +72,7 @@ services:
       PG_HOST_PORT: ${PG_HOST_PORT}
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_SCHEMA: ${MAGE_SCHEMA}
+    working_dir: /home/src/  
     ports:
       - "6789:6789"
     volumes:
@@ -79,6 +80,7 @@ services:
       - ./mlops/:/home/src/mlops
       - ./mlflow/artifacts:/home/src/mlflow/artifacts
       - ./data/:/home/src/mlops/data
+      - ./streamlit/config.toml:/home/src/.streamlit/config.toml
     networks:
       - app-network
       - back-tier      

@@ -37,7 +37,7 @@ def transform_custom(*args, **kwargs):
     try:
         # Open the command in a new session to detach it
         process = subprocess.Popen(
-            ['streamlit', 'run', '/home/src/mlops/payloads/app.py'],
+            ['streamlit', 'run', '/home/src/mlops/payloads/app.py', '--server.address', '0.0.0.0'],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             start_new_session=True

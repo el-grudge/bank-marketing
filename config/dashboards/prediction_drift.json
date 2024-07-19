@@ -170,8 +170,8 @@
         "stateFilter": {
           "error": true,
           "firing": true,
-          "noData": false,
-          "normal": false,
+          "noData": true,
+          "normal": true,
           "pending": true
         },
         "viewMode": "list"
