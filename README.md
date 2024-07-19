@@ -38,7 +38,7 @@ Tech stack:
 1. MLflow for experiment tracking and resgistration  
 2. Mage for orchestration  
 3. Evidently + Grafana for monitoring  
-4. Docker + Flask API for deployment  
+4. Docker + Flask API + Streamlit for deployment  
 5. Docker-compose for running multi-container applications  
 6. Postgres database to store tracking, orchestration, and monitoring data
 
@@ -76,8 +76,10 @@ In Mage, the following pipelines are created:
 **Deploy**  
 - Transitions the top 3 models to the staging phase
 - Transitions the top 1 model to the production phase
-- Create an API python script using Flask
-- Containerize the API into a docker file 
+- Creates a Flask API python script 
+- Creates a Dockerfile with the python script and gunicorn that can be deployed on the cloud
+- Runs the the Flask API
+- Runs a streamlit interface with the API that can be used to test the model
 
 **Test**
 
@@ -94,7 +96,7 @@ In Mage, the following pipelines are created:
 
 **Retrain**
 
-- Triggers a retraining cycle
+- Triggers a retraining cycle if alerted
 
 ### Model deployment
 
@@ -111,12 +113,20 @@ docker build -t predict:v01 -f ./mlops/payloads/predict.dockerfile .
 
 ### Model monitoring
 
-***In progress***  
+- The Grafana dashboard monitors the following metrics:
+    - Model performance: Bar chart showing train and validation accuracy (source: MLflow)
+    - Share of Missing Values: Trend showing share of missing values per month (source: Evidently)
+    - Number of Drifted Columns: Bar chart showing the number of drifted columsn per month, and a dotted-line shows the currently accepted threshold (source: Evidently) 
+    - Prediction Drift: Bar Chart showing the prediction drift value per month (source: Evidently)
+    - Pipeline Runs: Table showing information on pipeline runs (source: Mage)
+    - Alerts: List showing the defined alerts and their status (source: Grafana)
+- Currently, prediction drift is the only defined alert. The alert fires if a prediction drift higher than 0.1 is detected in any of the months. 
+    - When the alert is fired it sends a webhook notification to Mage on port 6790
+    - In the Retrain pipeline a listener listens to port 6790
+    - If the listener receives a POST request it creates an alert log file *and triggers a train pipeline to retrain the models*
 
-- *Grafana dashboard monitors the metrics created by evidently*
-- *Grafana alerts mage to retrain the model using webhooks*
 
-### *Cloud*
+### Cloud
 
 ⚠️ Currently, the project is setup to be deployed locally (...)
 
@@ -156,7 +166,7 @@ Now, go to [Mage](http://localhost:6789) and navigate to the pipeline page where
 
 ![pipelines](./images/pipelines.png)
 
-Run the pipelines in the following error:
+Run the pipelines in the following order:
 
 1. Prepare: Will ingest and prepare the data  
 2. Train: Will train multiple classifiers, track the training data, the models, their hyperparameters, and metrics, and add them to the model registry  
@@ -167,14 +177,21 @@ Run the pipelines in the following error:
 
 To view the logged models and the model registry go to [MLflow](http://localhost:5000).
 
+Tracking
 ![mlflow_tracking](./images/mlflow_tracking.png)
+
+Model registry
 ![mlflow_registry](./images/mlflow_registry.png)
 
 To view the monitoring dashboard go to [Grafana](http://localhost:3000).
 
 ![grafana](./images/grafana.png)
 
-❗Grafana's initial credentials are admin/admin.    
+❗Grafana's initial credentials are admin/admin.
+
+To interact with the model through streamlit dashboard go to [Streamlit app](http://localhost:8501)
+
+![streamlit](./images/streamlit.png)
 
 ## TODO List
 
@@ -195,8 +212,8 @@ To view the monitoring dashboard go to [Grafana](http://localhost:3000).
 - [x] split data by season  
 - [x] remove line from train pipeline - train (transform) block - that selects 100 rows from data
 - [x] model monitoring in grafana
-- [ ] build model monitoring dashboard in grafana
-- [ ] trigger retraining if performance decrease (test with data from different season)
+- [x] build model monitoring dashboard in grafana
+- [x] trigger retraining if performance decrease (test with data from different season)
 - [x] modify ingest to read data from personal github repo instead of uci url, to get data for specific season
 - [x] documentation
 - [ ] documentation with cloud
@@ -222,8 +239,9 @@ To view the monitoring dashboard go to [Grafana](http://localhost:3000).
 - [x] clean data folders - make sure there is always 1 file only in data/test called dataset_1.csv
 - [x] figure out how to reference saved prediction so that you can link it to best model
 - [ ] incorporate new data when retraining
-- [ ] save training data along with validation data, in test runs compare size of new data with training data
-- [ ] build retrainig model
+- [x] save training data along with validation data
+- [ ] in test runs compare size of new data with training data
+- [x] build retrainig model
 - [ ] create command center dashboard with streamlit
 - [ ] save preprocessor as artifact with log_artifact
 - [x] save training data features as artifact with log_artifact
@@ -236,14 +254,14 @@ To view the monitoring dashboard go to [Grafana](http://localhost:3000).
 - [ ] break monitoring pipeline into multiple steps with sql blco
 - [ ] when monitoring figure out how to retrieve last training data to use as reference
 - [ ] deploy model as lambda service
-- [ ] remove "drop table" from monitoring create table sql
-- [ ] insert into evidently table with tiemstamp column
+- [x] remove "drop table" from monitoring create table sql
+- [x] insert into evidently table with tiemstamp column
 - [ ] add validation data into training prod model - modify deploy pipeline accordingly
 - [ ] evidently presets, test_suite, test_suite presets
 - [ ] troubleshoot data drift - why so many columns
 - [ ] alternative trigerring with evidently 
 - [ ] future - replace mage with prefect
-- [ ] fix notification policy perisistence - it reverts back to 5 minute firing
+- [x] fix notification policy perisistence - it reverts back to 5 minute firing
 
 ## Evaluation Criteria
 

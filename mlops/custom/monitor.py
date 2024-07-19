@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import time
 import logging 
 import pandas as pd
@@ -25,12 +25,12 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s]: %(m
 SEND_TIMEOUT = 10
 
 create_table_statement = """
-drop table if exists grafana.evidently_metrics;
 create table grafana.evidently_metrics(
 	month integer,
 	prediction_drift float,
 	num_drifted_columns integer,
-	share_missing_values float
+	share_missing_values float,
+    update_time timestamp
 )
 """
 
@@ -56,9 +56,6 @@ model = mlflow.pyfunc.load_model(model_uri)
 
 with open('mlflow/artifacts/preprocessor.b', 'rb') as f_in: # load production_model
 	dv = joblib.load(f_in)
-
-with open('mlflow/artifacts/production_model.bin', 'rb') as f_in: # load production_model
-	model = joblib.load(f_in)
 
 raw_data = pd.read_csv('mlops/data/test/dataset.csv') # test data
 raw_data = prepare_data(raw_data)
@@ -103,7 +100,13 @@ def transform_custom(*args, **kwargs):
     if len(res) == 0:
         cur.execute("create database app_db;")
 
-    cur.execute(create_table_statement)
+    cur.execute("SELECT 1 FROM pg_tables WHERE tablename='evidently_metrics'")
+
+    res = cur.fetchall()
+
+    if len(res) == 0:
+        cur.execute(create_table_statement)
+        
 
     # Create a dictionary with month numerals as keys and 3-letter abbreviations as values
     months_dict = {i: calendar.month_abbr[i] for i in range(1, 13)}
@@ -124,7 +127,9 @@ def transform_custom(*args, **kwargs):
             num_drifted_columns = result['metrics'][1]['result']['number_of_drifted_columns']
             share_missing_values = result['metrics'][2]['result']['current']['share_of_missing_values']
 
+            current_timestamp = datetime.now()
+
             cur.execute(
-                "insert into grafana.evidently_metrics(month, prediction_drift, num_drifted_columns, share_missing_values) values (%s, %s, %s, %s)",
-                (month_num, prediction_drift, num_drifted_columns, share_missing_values)
+                "insert into grafana.evidently_metrics(month, prediction_drift, num_drifted_columns, share_missing_values, update_time) values (%s, %s, %s, %s, %s)",
+                (month_num, prediction_drift, num_drifted_columns, share_missing_values, current_timestamp)
             )

@@ -12,12 +12,12 @@ blocks:
   language: python
   name: watch
   retry_config: null
-  status: not_executed
+  status: executed
   timeout: null
   type: sensor
   upstream_blocks: []
   uuid: watch
-- all_upstream_blocks_executed: false
+- all_upstream_blocks_executed: true
   color: pink
   configuration: {}
   downstream_blocks: []

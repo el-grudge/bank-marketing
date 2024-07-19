@@ -106,7 +106,7 @@ def vectorize_features(dv, X):
 
 
 def load_pickle(filename):
-    with open(f'mlflow/artifacts/{filename}', 'rb') as f_in:
+    with open(f'{filename}', 'rb') as f_in:
         payload = pickle.load(f_in)
     return payload
 

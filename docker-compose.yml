@@ -71,7 +71,7 @@ services:
       POSTGRES_HOST: ${POSTGRES_HOST}
       PG_HOST_PORT: ${PG_HOST_PORT}
       POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_SCHEMA: ${MAGE_SCHEMA}      
+      POSTGRES_SCHEMA: ${MAGE_SCHEMA}
     ports:
       - "6789:6789"
     volumes:

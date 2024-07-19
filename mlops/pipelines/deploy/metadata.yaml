@@ -36,7 +36,8 @@ blocks:
 - all_upstream_blocks_executed: false
   color: null
   configuration: {}
-  downstream_blocks: []
+  downstream_blocks:
+  - deploy
   executor_config: null
   executor_type: local_python
   has_callback: false
@@ -52,7 +53,8 @@ blocks:
 - all_upstream_blocks_executed: false
   color: null
   configuration: {}
-  downstream_blocks: []
+  downstream_blocks:
+  - deploy
   executor_config: null
   executor_type: local_python
   has_callback: false
@@ -65,6 +67,23 @@ blocks:
   upstream_blocks:
   - promote
   uuid: create_dockerfile
+- all_upstream_blocks_executed: false
+  color: purple
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: deploy
+  retry_config: null
+  status: updated
+  timeout: null
+  type: custom
+  upstream_blocks:
+  - create_dockerfile
+  - create_python_script
+  uuid: deploy
 cache_block_output_in_memory: false
 callbacks: []
 concurrency_config: {}
