@@ -234,7 +234,6 @@ To interact with the model through streamlit dashboard go to [Streamlit app](htt
 - [ ] mlflow experiment registry - cloud
 - [ ] workflow orchestration - cloud (check volumes in docker_compose.yaml, don't upload ssh keys to cloud)
 - [ ] iac 
-- [ ] hyperparameter tuning with hyperops
 - [x] copy only necessary files to mage docker container (./:/home/src copies everything)
 - [x] add grafana to docker-compose
 - [x] create shared volumnes for all docker services (volumes) (doesn't work)
@@ -246,65 +245,28 @@ To interact with the model through streamlit dashboard go to [Streamlit app](htt
 - [x] rename transformer load to promote
 - [x] clean data folders - make sure there is always 1 file only in data/test called dataset_1.csv
 - [x] figure out how to reference saved prediction so that you can link it to best model
-- [ ] incorporate new data when retraining
 - [x] save training data along with validation data
-- [ ] in test runs compare size of new data with training data
 - [x] build retrainig model
 - [ ] create command center dashboard with streamlit
-- [ ] save preprocessor as artifact with log_artifact
 - [x] save training data features as artifact with log_artifact
 - [x] save validation data features as artifact with log_artifact
-- [ ] grafana - show # of prediction drift months in alert
-- [ ] save grafana dashboard 
-- [ ] cleanup files in monitor folder
-- [ ] try apply_provisioning.sh with the right permissions
+- [x] save grafana dashboard 
+- [x] try apply_provisioning.sh with the right permissions (didn't work, alerts and contact points are not editable, dashboard is, that's fine)
 - [x] try persisting email and webhook contacts and policies
-- [ ] break monitoring pipeline into multiple steps with sql blco
-- [ ] when monitoring figure out how to retrieve last training data to use as reference
 - [ ] deploy model as lambda service
 - [x] remove "drop table" from monitoring create table sql
 - [x] insert into evidently table with tiemstamp column
+- [ ] future - replace mage with prefect
+- [x] fix notification policy perisistence - it reverts back to 5 minute firing
+- [ ] hyperparameter tuning with hyperops
+- [ ] incorporate new data when retraining
+- [ ] in test runs compare size of new data with training data
+- [ ] save preprocessor as artifact with log_artifact
+- [ ] grafana - show # of prediction drift months in alert
+- [ ] cleanup files in monitor folder
+- [ ] break monitoring pipeline into multiple steps with sql blco
+- [ ] when monitoring figure out how to retrieve last training data to use as reference
 - [ ] add validation data into training prod model - modify deploy pipeline accordingly
 - [ ] evidently presets, test_suite, test_suite presets
 - [ ] troubleshoot data drift - why so many columns
 - [ ] alternative trigerring with evidently 
-- [ ] future - replace mage with prefect
-- [x] fix notification policy perisistence - it reverts back to 5 minute firing
-
-## Evaluation Criteria
-
-* Problem description
-    * 0 points: The problem is not described
-    * 1 point: The problem is described but shortly or not clearly
-    * [2] points: The problem is well described and it's clear what the problem the project solves
-* Cloud
-    * [0] points: Cloud is not used, things run only locally
-    * 2 points: The project is developed on the cloud OR uses localstack (or similar tool) OR the project is deployed to Kubernetes or similar container management platforms
-    * 4 points: The project is developed on the cloud and IaC tools are used for provisioning the infrastructure
-* Experiment tracking and model registry
-    * 0 points: No experiment tracking or model registry
-    * 2 points: Experiments are tracked or models are registered in the registry
-    * [4] points: Both experiment tracking and model registry are used
-* Workflow orchestration
-    * 0 points: No workflow orchestration
-    * 2 points: Basic workflow orchestration
-    * [4] points: Fully deployed workflow 
-* Model deployment
-    * 0 points: Model is not deployed
-    * 2 points: Model is deployed but only locally
-    * [4] points: The model deployment code is containerized and could be deployed to cloud or special tools for model deployment are used
-* Model monitoring
-    * 0 points: No model monitoring
-    * 2 points: Basic model monitoring that calculates and reports metrics
-    * [4] points: Comprehensive model monitoring that sends alerts or runs a conditional workflow (e.g. retraining, generating debugging dashboard, switching to a different model) if the defined metrics threshold is violated
-* Reproducibility
-    * 0 points: No instructions on how to run the code at all, the data is missing
-    * 2 points: Some instructions are there, but they are not complete OR instructions are clear and complete, the code works, but the data is missing
-    * [4] points: Instructions are clear, it's easy to run the code, and it works. The versions for all the dependencies are specified.
-* Best practices
-    * [ ] There are unit tests (1 point)
-    * [ ] There is an integration test (1 point)
-    * [ ] Linter and/or code formatter are used (1 point)
-    * [ ] There's a Makefile (1 point)
-    * [ ] There are pre-commit hooks (1 point)
-    * [ ] There's a CI/CD pipeline (2 points)
